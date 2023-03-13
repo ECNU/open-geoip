@@ -56,7 +56,7 @@ systemctl start go-geoip
 	},
 	"db": {
 		"maxmind": "GeoLite2-City.mmdb",
-		"qqzengip": "qqzeng-ip-3.0-ultimate.dat"
+		"qqzengip": ""
 	},
 	"source": {
 		"ipv4": "maxmind",
@@ -93,7 +93,7 @@ systemctl start go-geoip
 |db.maxmind|string|MaxMind GeoLite2数据库的文件的路径|
 |db.qqzengip|string|qqzengip数据库的文件的路径|
 |source|object|一个包含IP信息来源设置的部分|
-|source.ipv4|string|IPv4信息的来源，目前支持maxmind或qqzengip|
+|source.ipv4|string|IPv4信息的来源，目前支持maxmind或[qqzengip](https://github.com/zengzhan/qqzeng-ip)|
 |source.ipv6|string|IPv6信息的来源，目前支持maxmind|
 |http|object|一个包含HTTP服务器设置的部分|
 |http.listen|string|HTTP服务器监听的地址和端口|

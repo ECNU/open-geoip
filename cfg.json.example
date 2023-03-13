@@ -23,8 +23,7 @@
 		]
 	},
 	"db": {
-		"maxmind": "GeoLite2-City.mmdb",
-		"qqzengip": "qqzeng-ip-3.0-ultimate.dat"
+		"maxmind": "GeoLite2-City.mmdb"
 	},
 	"source": {
 		"ipv4": "maxmind",
