@@ -4,35 +4,35 @@
 		"level": "DEBUG",
 		"keepHours": 24
 	},
-	"campus":{
-        "continent": "亚洲",
-        "country": "中国",
-        "province": "上海",
-        "city": "上海",
-        "district": "华东师范大学",
-        "isp": "校园网",
-        "areaCode": "310000",
-        "countryEnglish": "China",
-        "countryCode": "CN",
-        "longitude": "",
-        "latitude": "",
-		"campusips": [
+	"campus": {
+		"continent": "亚洲",
+		"country": "中国",
+		"province": "上海",
+		"city": "上海",
+		"district": "华东师范大学",
+		"isp": "校园网",
+		"areaCode": "310000",
+		"countryEnglish": "China",
+		"countryCode": "CN",
+		"longitude": "",
+		"latitude": "",
+		"ips": [
 			"10.0.0.0/8",
 			"192.168.0.0/16",
 			"172.16.0.0/12"
 		]
 	},
-	"db":{
-		"maxmind":"GeoLite2-City.mmdb",
-		"qqzengip":"qqzeng-ip-3.0-ultimate.dat"
+	"db": {
+		"maxmind": "GeoLite2-City.mmdb",
+		"qqzengip": "qqzeng-ip-3.0-ultimate.dat"
 	},
-	"source":{
-		"ipv4":"maxmind",
-		"ipv6":"maxmind"
+	"source": {
+		"ipv4": "maxmind",
+		"ipv6": "maxmind"
 	},
 	"http": {
 		"listen": "0.0.0.0:80",
-		"trustProxy":["127.0.0.1","::1"],
+		"trustProxy": ["127.0.0.1", "::1"],
 		"x-api-key": "this-is-key"
 	}
 }
