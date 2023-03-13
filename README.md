@@ -29,7 +29,46 @@ systemctl start go-geoip
 
 ## 配置说明
 
-`cfg.jon` 中各个字段的说明如下：
+```json
+{
+	"logger": {
+		"dir": "logs/",
+		"level": "DEBUG",
+		"keepHours": 24
+	},
+	"campus": {
+		"continent": "亚洲",
+		"country": "中国",
+		"province": "上海",
+		"city": "上海",
+		"district": "华东师范大学",
+		"isp": "校园网",
+		"areaCode": "310000",
+		"countryEnglish": "China",
+		"countryCode": "CN",
+		"longitude": "",
+		"latitude": "",
+		"ips": [
+			"10.0.0.0/8",
+			"192.168.0.0/16",
+			"172.16.0.0/12"
+		]
+	},
+	"db": {
+		"maxmind": "GeoLite2-City.mmdb",
+		"qqzengip": "qqzeng-ip-3.0-ultimate.dat"
+	},
+	"source": {
+		"ipv4": "maxmind",
+		"ipv6": "maxmind"
+	},
+	"http": {
+		"listen": "0.0.0.0:80",
+		"trustProxy": ["127.0.0.1", "::1"],
+		"x-api-key": "this-is-key"
+	}
+}
+```
 
 |配置项|类型|说明|
 |---|---|---|
@@ -49,7 +88,7 @@ systemctl start go-geoip
 |campus.countryCode|string|园区所在国家的国家代码|
 |campus.longitude|string|园区的经度|
 |campus.latitude|string|园区的纬度|
-|campus.campusips|array|属于该园区的IP范围的数组，命中这部分的IP地址，将使用配置文件中的内容进行返回|
+|campus.ips|array|属于该园区的IP范围的数组，命中这部分的IP地址，将使用配置文件中的内容进行返回|
 |db|object|一个包含数据库设置的部分|
 |db.maxmind|string|MaxMind GeoLite2数据库的文件的路径|
 |db.qqzengip|string|qqzengip数据库的文件的路径|
