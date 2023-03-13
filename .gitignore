@@ -4,9 +4,20 @@
 *.dll
 *.so
 *.dylib
+*.mmdb
+*.dat
+*.tar.gz
+*.zip
+go-geoip
 
 # Test binary, built with `go test -c`
 *.test
+
+# config
+*.json
+
+# logs
+logs/*
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
