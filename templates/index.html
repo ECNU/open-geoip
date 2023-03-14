@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <head>
     <meta charset="UTF-8"/>
     <title>Go-GeoIP</title>
@@ -102,9 +101,9 @@
     $(function () {
         getMyIp();
 
-        // 查询ip的方法
+        // query ip address function
         function getIp() {
-            var ip = $("#ip-address").val();
+            const ip = $("#ip-address").val();
             $.ajax({
                 type: "GET",
                 url: "/ip",
@@ -120,21 +119,21 @@
             });
         }
 
-        //为表单元素添加失去焦点事件
+        // input lose focus
         $("#ip-address").blur(function () {
-            var $parent = $(this).parent();
-            $parent.find(".msg").remove(); //删除以前的提醒元素（find()：查找匹配元素集中元素的所有匹配元素）		
+            const $parent = $(this).parent();
+            $parent.find(".msg").remove();
 
 
-            //验证IP，前置验证规则可以优化用户体验并减少额外的后端调用
+            // check ip
             if ($(this).is("#ip-address")) {
                 // 去除两端空格
-                var psdVal = $.trim(this.value);
-                // var regIpv4 = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
-                var regIpv4 = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/
-                var regIpv6 = /^([\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^::([\da-fA-F]{1,4}:){0,4}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:):([\da-fA-F]{1,4}:){0,3}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){2}:([\da-fA-F]{1,4}:){0,2}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){3}:([\da-fA-F]{1,4}:){0,1}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$|^:((:[\da-fA-F]{1,4}){1,6}|:)$|^[\da-fA-F]{1,4}:((:[\da-fA-F]{1,4}){1,5}|:)$|^([\da-fA-F]{1,4}:){2}((:[\da-fA-F]{1,4}){1,4}|:)$|^([\da-fA-F]{1,4}:){3}((:[\da-fA-F]{1,4}){1,3}|:)$|^([\da-fA-F]{1,4}:){4}((:[\da-fA-F]{1,4}){1,2}|:)$|^([\da-fA-F]{1,4}:){5}:([\da-fA-F]{1,4})?$|^([\da-fA-F]{1,4}:){6}:$/
-                if (psdVal == "" || (!regIpv4.test(psdVal) && !regIpv6.test(psdVal))) {
-                    var errorMsg = "IP地址格式不正确";
+                const psdVal = $.trim(this.value);
+                // const regIpv4 = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+                const regIpv4 = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/
+                const regIpv6 = /^([\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^::([\da-fA-F]{1,4}:){0,4}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:):([\da-fA-F]{1,4}:){0,3}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){2}:([\da-fA-F]{1,4}:){0,2}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){3}:([\da-fA-F]{1,4}:){0,1}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$|^:((:[\da-fA-F]{1,4}){1,6}|:)$|^[\da-fA-F]{1,4}:((:[\da-fA-F]{1,4}){1,5}|:)$|^([\da-fA-F]{1,4}:){2}((:[\da-fA-F]{1,4}){1,4}|:)$|^([\da-fA-F]{1,4}:){3}((:[\da-fA-F]{1,4}){1,3}|:)$|^([\da-fA-F]{1,4}:){4}((:[\da-fA-F]{1,4}){1,2}|:)$|^([\da-fA-F]{1,4}:){5}:([\da-fA-F]{1,4})?$|^([\da-fA-F]{1,4}:){6}:$/
+                if (psdVal === "" || (!regIpv4.test(psdVal) && !regIpv6.test(psdVal))) {
+                    const errorMsg = "Incorrect IP format.";
                     $parent.append("<span class='msg red0'>" + errorMsg + "</span>");
                     // 使得按钮不可点击
                     $("#btnSubmit").attr("disabled", true)
@@ -143,22 +142,15 @@
                     $("#btnSubmit").attr("disabled", false)
                 }
             }
-        }).keyup(function () { // 当一个按键按下，为keydown事件；当一个按键释放，为keyup事件
-            // triggerHandler用来触发一个元素的事件
-            // 这里触发的就是失去焦点：blur
-            // 总的逻辑：当键盘被按后，就触发blur事件
+        }).keyup(function () {
             $(this).triggerHandler("blur");
         }).focus(function () {
             $(this).triggerHandler("blur");
         });
 
-        //点击按钮时，通过trigger()来触发文本框的失去焦点事件
         $("#btnSubmit").click(function () {
-            console.log("点击了按钮")
-            getIp()
-            //trigger 事件执行完后，浏览器会为submit按钮获得焦点
+            getIp();
             $("#ip-address").trigger("blur");
-            //这里后续应该引入验证码方案
         });
     });
 
@@ -168,7 +160,7 @@
             type: "GET",
             url: "/myip",
             success: function (res, status) {
-                $("#show-myip").html("您的 IP 地址是 :" + '<a href="/myip" class="boldfont">' + res + '</a>')
+                $("#show-myip").html("Your IP address: " + '<a href="/myip" class="boldfont">' + res + '</a>')
             },
             dataType: "text"
         });
