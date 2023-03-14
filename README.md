@@ -1,6 +1,7 @@
 # Go-GeoIP
 Go-GeoIP: 简单且高性能的 IP 地址地理信息查询服务
 
+![](https://github.com/ECNU/go-geoip/blob/main/demo.jpg?raw=true)
 ## 安装运行
 ### 编译打包
 ```
