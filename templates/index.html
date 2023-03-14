@@ -4,29 +4,18 @@
     <meta charset="UTF-8"/>
     <title>Go-GeoIP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/libs/particles/css/style.css">
     <link rel="stylesheet" href="../assets/libs/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/libs/icons/materialdesignicons.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 
     <style>
-        #particles-js {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1;
-        }
-
-        .red0{
-            color:red;
-            font-weight:bold;
+        .red0 {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-<!-- particles.js container -->
 <div id="captcha"></div>
 <div id="navbar" class="">
     <nav class="navbar navbar-expand-lg navbar-white fixed-top navbar-custom sticky sticky-dark" id="main-menu">
@@ -37,7 +26,7 @@
         </div>
     </nav>
 </div>
-<section class="bg-home section bg-lightan active" id="home">
+<section class="section bg-lightan active" id="home">
     <div class="home-overlay"></div>
     <div class="container">
         <div class="row justify-content-center">
@@ -48,13 +37,13 @@
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group mb-0">
-                                <input class="form-control" id="ip-address" placeholder="ip address"
-                                       type="text" />
+                                <input class="form-control" id="ip-address" placeholder="IP ADDRESS"
+                                       type="text"/>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group home-button">
-                                <button id="btnSubmit" class="btn btn-primary w-100">查询</button>
+                                <button id="btnSubmit" class="btn btn-primary w-100">GO!</button>
                             </div>
                         </div>
                     </div>
@@ -68,31 +57,32 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
-                <div class="mt-4"><h5>Github</h5>
-                                  <ul class="list-unstyled footer-link mt-3">
-                                <li><a href="https://github.com/ECNU/go-geoip">
-                                    <pre>Go-GeoIP</pre>
-                                </a></li>
+                <div class="mt-4">
+                    <h5>ABOUT</h5>
+                    <p><strong>Go-GeoIP -</strong> A fast and accurate IP geolocation service implemented in Go.</p>
+                    <p class="text-muted mb-0">
+                        Copyright &copy;<a href="https://eoffice.ecnu.edu.cn/">something for copyright</a>
+                    </p>
                 </div>
             </div>
-            <div class="col-lg-7 offset-lg-1">
+            <div class="col-lg-6 offset-lg-2">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div class="mt-4">
-                            <h5 class="f-18">API</h5>
+                            <h5 class="f-18">RESOURCE</h5>
                             <ul class="list-unstyled footer-link mt-3">
                                 <li>
                                     <a href="https://github.com/ECNU/go-geoip">
-                                        Document
+                                        GITHUB
                                     </a>
-                                </li>                                                              
+                                </li>
                             </ul>
                         </div>
                     </div>
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div class="mt-4 ps-0 ps-lg-5">
-                            <h5 class="f-18">About</h5>
+                            <h5 class="f-18">MORE</h5>
                             <ul class="list-unstyled footer-link mt-3">
                                 <li><a href="https://www.maxmind.com">
                                     <pre>GeoLite2 @MaxMind</pre>
@@ -104,14 +94,6 @@
             </div>
         </div>
 
-        <hr class="mt-2">
-        <div class="row mt-4">
-            <div class="col-lg-12">
-                <p class="text-center text-muted mb-0">
-                    Copyright &copy;<a href="https://eoffice.ecnu.edu.cn/">something for copyright</a>
-                </p>
-            </div>
-        </div>
     </div>
 </section>
 <script src="../assets/libs/jquery-1.12.4/jquery.min.js"></script>
@@ -119,6 +101,7 @@
     // jqeury
     $(function () {
         getMyIp();
+
         // 查询ip的方法
         function getIp() {
             var ip = $("#ip-address").val();
@@ -187,16 +170,13 @@
             success: function (res, status) {
                 $("#show-myip").html("您的 IP 地址是 :" + '<a href="/myip" class="boldfont">' + res + '</a>')
             },
-            dataType: "text" 
+            dataType: "text"
         });
-    }   
+    }
+
     //getMyIp()
 </script>
 <script src="../assets/libs/bootstrap/bootstrap.bundle.min.js"></script>
-<script src="../assets/libs/polyfills/smooth-scroll.polyfills.min.js"></script>
-<script src="../assets/libs/polyfills/gumshoe.polyfills.min.js"></script>
-<script src="../assets/libs/icons/unicons.js"></script>
-		
 </body>
 
 </html>
