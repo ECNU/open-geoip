@@ -61,6 +61,7 @@ type HttpConfig struct {
 	Listen     string   `json:"listen"`
 	TrustProxy []string `json:"trustProxy"`
 	XAPIKey    string   `json:"x-api-key"`
+	CORS       []string `json:"cors"`
 }
 
 var (
