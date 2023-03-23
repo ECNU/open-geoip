@@ -196,7 +196,7 @@ curl -H "X-API-KEY: this-is-key" http://localhost/api/v1/network/ip?ip=2001:da8:
 ```
 
 
-## brenchmark
+## benchmark
 基于 `maxmind` 数据库，`web` 服务性能测试
 ```
 # go test -bench=.  -benchmem
