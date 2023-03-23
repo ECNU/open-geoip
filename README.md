@@ -10,7 +10,6 @@ Open-GeoIP: 简单且高性能的 IP 地址地理信息查询服务
 ```
 tar -zxvf open-geoip-0.1.0-linux-amd64.tar.gz
 cd open-geoip/
-chmod +x control
 ./control start
 ```
 访问你服务器的 80 端口即可使用。
@@ -32,6 +31,8 @@ systemctl start open-geoip
 
 ### 编译打包
 ```
+git clone https://github.com/ECNU/open-geoip.git
+cd open-geoip/
 chmod +x control
 ./control pack
 ```
