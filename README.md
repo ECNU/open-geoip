@@ -213,3 +213,15 @@ BenchmarkOpenAPIForIPv6-2    	  391868	      3378 ns/op	    2592 B/op	      23 a
 PASS
 ok  	github.com/ECNU/go-geoip	7.044s
 ```
+
+## 鸣谢
+
+本项目的一些主要功能使用了以下开源项目，更多的依赖详见 `go.mod` 。
+
+感谢他们的开源精神。
+
+`web` 服务 —— [gin](github.com/gin-gonic/gin) 
+`maxmind` 解析 —— [geoip2-golang](github.com/oschwald/geoip2-golang)
+`maxming` 自动更新 —— [go-geoip](github.com/pieterclaerhout/go-geoip)
+`ipdb` 解析 —— [ipdb-go](github.com/ipipdotnet/ipdb-go)
+`qqzengip` 解析 —— [qqzeng-ip](https://github.com/zengzhan/qqzeng-ip)
