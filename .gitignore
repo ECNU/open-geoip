@@ -11,8 +11,6 @@
 *.zip
 go-geoip
 
-# Test binary, built with `go test -c`
-*.test
 
 # config
 *.json

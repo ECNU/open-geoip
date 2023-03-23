@@ -146,12 +146,12 @@ myip 的接口用于返回请求者的 IP 地址，对于一些无浏览器的�
 提供了简单字符串与 json 格式化两种风格接口。
 
 ```
-# curl http://go-geoip/myip
+# curl http://localhost/myip
 # 192.168.0.100
 ```
 
 ```
-# curl http://go-geoip/myip/format
+# curl http://localhost/myip/format
 # {"errCode":0,"errMsg":"success","requestId":"0f40823e-04ce-4def-9af2-71e7e1403ec8","data":{"ip":"192.168.0.100"}}
 ```
 
@@ -160,7 +160,7 @@ searchapi 接口面向浏览器，提供了一个 IP 地址的查询接口，并
 
 这个接口受验证码和限流措施的保护，以防范可能的恶意爬虫（ToDo）
 
-他访问的路径是 `http://go-geoip/ip`
+他访问的路径是 `http://localhost/ip`
 
 ### openapi
 openapi 接口面向第三方应用，提供了一个 IP 地址的查询接口，通过 X-API-KEY 进行授权校验。
@@ -169,7 +169,7 @@ openapi 接口面向第三方应用，提供了一个 IP 地址的查询接口�
 
 - request
 ```
-curl -H "X-API-KEY: this-is-key" http://go-geoip/api/v1/network/ip?ip=2001:da8:8005:a405:250:56ff:feaf:8c28
+curl -H "X-API-KEY: this-is-key" http://localhost/api/v1/network/ip?ip=2001:da8:8005:a405:250:56ff:feaf:8c28
 ```
 
 - response
@@ -203,7 +203,7 @@ curl -H "X-API-KEY: this-is-key" http://go-geoip/api/v1/network/ip?ip=2001:da8:8
 
 goos: linux
 goarch: amd64
-pkg: github.com/ECNU/go-geoip
+pkg: github.com/ECNU/open-geoip
 cpu: Intel(R) Xeon(R) Platinum 8369B CPU @ 2.70GHz
 BenchmarkIndex-2             	  244190	      4271 ns/op	   10000 B/op	      15 allocs/op
 BenchmarkSeachAPIForIPv4-2   	  782768	      1741 ns/op	    1904 B/op	      15 allocs/op
@@ -211,7 +211,7 @@ BenchmarkSeachAPIForIPv6-2   	  818250	      1744 ns/op	    1904 B/op	      15 a
 BenchmarkOpenAPIForIPv4-2    	  394813	      3383 ns/op	    2592 B/op	      23 allocs/op
 BenchmarkOpenAPIForIPv6-2    	  391868	      3378 ns/op	    2592 B/op	      23 allocs/op
 PASS
-ok  	github.com/ECNU/go-geoip	7.044s
+ok  	github.com/ECNU/open-geoip	7.044s
 ```
 
 ## 鸣谢
