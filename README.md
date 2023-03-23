@@ -7,6 +7,10 @@ Open-GeoIP: 简单且高性能的 IP 地址地理信息查询服务
 ### 二进制直接运行
 在 [release](https://github.com/ECNU/open-geoip/releases) 中下载最新的 [release] 包，解压后直接运行即可。
 
+注意：`release` 中内置的数据库文件来自于 [ipdb-go](https://github.com/ipipdotnet/ipdb-go) 中的 `city.free.ipdb`，仅供测试使用，不保证数据的准确性。
+
+如应用于生产环境，请获取商用授权，或者[注册](https://www.maxmind.com/en/geolite2/signup) `maxmind` 的账号后，获取免费版的 `GeoLite2-City.mmdb` 数据库文件，并更新配置文件替换数据源为 `maxmind`。
+
 ```
 tar -zxvf open-geoip-0.1.0-linux-amd64.tar.gz
 cd open-geoip/
