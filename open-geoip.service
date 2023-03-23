@@ -1,5 +1,5 @@
 [Unit]
-Description=go-geoip
+Description=open-geoip
 After=network-online.target
 Wants=network-online.target
 
@@ -9,8 +9,8 @@ User=root
 Group=root
 
 Type=simple
-ExecStart=/opt/go-geoip/go-geoip
-WorkingDirectory=/opt/go-geoip
+ExecStart=/opt/open-geoip/open-geoip
+WorkingDirectory=/opt/open-geoip
 
 Restart=always
 RestartSec=1

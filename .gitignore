@@ -5,6 +5,7 @@
 *.so
 *.dylib
 *.mmdb
+*.sha256
 *.dat
 *.tar.gz
 *.zip

@@ -1,17 +1,24 @@
 package models
 
 import (
+	"log"
 	"testing"
 
-	"log"
+	"github.com/ECNU/open-geoip/g"
+	"github.com/toolkits/file"
 
-	"github.com/ECNU/go-geoip/g"
 	"github.com/stretchr/testify/assert"
 )
 
 func init() {
-	g.ParseConfig("cfg.json")
-	err := InitReader(g.Config().DB)
+	g.ParseConfig("cfg.json.test")
+	if file.IsExist("qqzeng-ip-3.0-ultimate.dat") {
+		g.Config().DB.Qqzengip = "qqzeng-ip-3.0-ultimate.dat"
+	}
+	if file.IsExist("city.free.ipdb") {
+		g.Config().DB.Ipdb = "city.free.ipdb"
+	}
+	err := InitReader()
 	if err != nil {
 		log.Fatalf("load geo db failed, %v", err)
 	}
@@ -50,34 +57,33 @@ func Test_IpCheck(t *testing.T) {
 }
 
 func Test_GetIP(t *testing.T) {
-	config := g.Config().Source
 
-	// ipv4 和 ipv6 均采用 maxmind 数据源
-	config.IPv4 = "maxmind"
-	config.IPv6 = "maxmind"
-	res, _ := GetIP("202.120.92.60", config)
+	res, _ := GetIP("202.120.92.60", g.Config().Source)
 	assert.Equal(t, res.Country, "中国")
-	res, _ = GetIP("2001:da8:8005:a492::60", config)
+	res, _ = GetIP("2001:da8:8005:a492::60", g.Config().Source)
 	assert.Equal(t, res.Country, "中国")
 
-	// ipv4 切换为 qqzengip
-	config.IPv4 = "qqzengip"
-	config.IPv6 = "qqzengip"
-	res, _ = GetIP("202.120.92.60", config)
-	assert.Equal(t, res.Country, "中国")
-	// qqzengip 不支持 ipv6，此时应该查不到
-	res, _ = GetIP("2001:da8:8005:a492::60", config)
-	assert.Equal(t, res.Country, "")
-
+	if file.IsExist("city.free.ipdb") {
+		g.Config().Source.IPv4 = "ipdb"
+		res, _ = GetIP("114.114.114.114", g.Config().Source)
+		t.Log(res)
+		assert.Equal(t, res.Country, "114DNS.COM")
+	}
+	if file.IsExist("qqzeng-ip-3.0-ultimate.dat") {
+		g.Config().Source.IPv4 = "qqzengip"
+		res, _ = GetIP("202.120.92.60", g.Config().Source)
+		t.Log(res)
+		assert.Equal(t, res.ISP, "教育网")
+	}
 	//非法的请求
-	_, err := GetIP("201..1", config)
+	_, err := GetIP("201..1", g.Config().Source)
 	assert.NotNil(t, err)
-	_, err = GetIP("2001:da8:::::::::", config)
+	_, err = GetIP("2001:da8:::::::::", g.Config().Source)
 	assert.NotNil(t, err)
-
 }
 
 func TestSearchIP(t *testing.T) {
+
 	res := SearchIP("192.168.100.1")
 	assert.Equal(t, res.ISP, "校园网")
 	assert.Equal(t, res.IP, "192.168.100.1")
@@ -92,17 +98,30 @@ func TestSearchIP(t *testing.T) {
 	res = SearchIP("202:da8:::::::")
 	assert.Equal(t, res.IP, "202:da8:::::::")
 	assert.Equal(t, res.Country, "")
-
 }
 
-func Benchmark_IpFindv4(b *testing.B) {
+func Benchmark_maxmind(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		SearchIP("202.120.92.60")
 	}
 }
 
-func Benchmark_IpFindv6(b *testing.B) {
+func Benchmark_Ipdb(b *testing.B) {
+	if !file.IsExist("city.free.ipdb") {
+		return
+	}
+	g.Config().Source.IPv4 = "ipdb"
 	for i := 0; i < b.N; i++ {
-		SearchIP("2001:da8:8005:abcd:1234::8888")
+		SearchIP("202.120.92.60")
+	}
+}
+
+func Benchmark_qqzengip(b *testing.B) {
+	if !file.IsExist("qqzeng-ip-3.0-ultimate.dat") {
+		return
+	}
+	g.Config().Source.IPv4 = "qqzengip"
+	for i := 0; i < b.N; i++ {
+		SearchIP("202.120.92.60")
 	}
 }

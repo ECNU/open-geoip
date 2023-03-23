@@ -23,15 +23,25 @@
 		]
 	},
 	"db": {
-		"maxmind": "GeoLite2-City.mmdb"
+		"maxmind": "GeoLite2-City.mmdb",
+		"qqzengip": "",
+		"ipdb":""
 	},
 	"source": {
 		"ipv4": "maxmind",
 		"ipv6": "maxmind"
 	},
+	"autoDownload":{
+		"enabled":false,
+		"MaxmindLicenseKey":"",
+		"targetFilePath":"",
+		"timeout":3,
+		"interval":24
+	},
 	"http": {
 		"listen": "0.0.0.0:80",
 		"trustProxy": ["127.0.0.1", "::1"],
+		"cors":["http://localhost"],
 		"x-api-key": "this-is-key"
 	}
 }

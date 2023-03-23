@@ -8,7 +8,7 @@ import (
 
 	"github.com/toolkits/pkg/logger"
 
-	"github.com/ECNU/go-geoip/g"
+	"github.com/ECNU/open-geoip/g"
 )
 
 func (self IpGeo) ToString() string {

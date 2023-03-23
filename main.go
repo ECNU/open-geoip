@@ -11,9 +11,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ECNU/go-geoip/controller"
-	"github.com/ECNU/go-geoip/g"
-	"github.com/ECNU/go-geoip/models"
+	"github.com/ECNU/open-geoip/controller"
+	"github.com/ECNU/open-geoip/cron"
+	"github.com/ECNU/open-geoip/g"
+	"github.com/ECNU/open-geoip/models"
 )
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 	srv := controller.InitGin(g.Config().Http.Listen)
 	g.InitLog(g.Config().Logger)
 
-	err := models.InitReader(g.Config().DB)
+	err := models.InitReader()
 	if err != nil {
 		log.Fatalf("load geo db failed, %v", err)
 	}
@@ -41,6 +42,8 @@ func main() {
 			log.Fatalf("listen: %s", err)
 		}
 	}()
+
+	go cron.SyncMaxmindDatabase()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

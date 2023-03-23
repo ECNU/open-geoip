@@ -1,13 +1,15 @@
-module github.com/ECNU/go-geoip
+module github.com/ECNU/open-geoip
 
-go 1.20
+go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.9.0
+	github.com/ipipdotnet/ipdb-go v1.3.3
 	github.com/jinzhu/copier v0.3.5
 	github.com/oschwald/geoip2-golang v1.8.0
+	github.com/pieterclaerhout/go-geoip/v2 v2.0.7
 	github.com/satori/go.uuid v1.2.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/toolkits/file v0.0.0-20160325033739-a5b3c5147e07
 	github.com/toolkits/pkg v1.3.3
 )
@@ -29,6 +31,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/oschwald/maxminddb-golang v1.10.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.9 // indirect

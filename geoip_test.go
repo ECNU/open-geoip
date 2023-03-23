@@ -8,14 +8,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ECNU/go-geoip/controller"
-	"github.com/ECNU/go-geoip/g"
-	"github.com/ECNU/go-geoip/models"
+	"github.com/ECNU/open-geoip/controller"
+	"github.com/ECNU/open-geoip/g"
+	"github.com/ECNU/open-geoip/models"
 )
 
 func init() {
-	g.ParseConfig("cfg.json")
-	err := models.InitReader(g.Config().DB)
+	g.ParseConfig("cfg.json.test")
+	err := models.InitReader()
 	if err != nil {
 		log.Fatalf("load geo db failed, %v", err)
 	}
@@ -35,8 +35,8 @@ func TestIndex(t *testing.T) {
 	httpServer.Handler.ServeHTTP(w, req)
 	// 检查响应状态码是否为 200
 	assert.Equal(t, 200, w.Code)
-	// 检查响应内容是否包含 Go-GeoIP 地址
-	assert.Contains(t, w.Body.String(), "Go-GeoIP")
+	// 检查响应内容是否包含 open-geoip 地址
+	assert.Contains(t, w.Body.String(), "open-geoip")
 }
 
 func TestSeachAPI(t *testing.T) {

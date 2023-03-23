@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/ECNU/go-geoip/models"
+	"github.com/ECNU/open-geoip/models"
 
 	"github.com/gin-gonic/gin"
 )

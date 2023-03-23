@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
-	"github.com/ECNU/go-geoip/g"
-	"github.com/ECNU/go-geoip/util"
+	"github.com/ECNU/open-geoip/g"
+	"github.com/ECNU/open-geoip/util"
 	"github.com/gin-gonic/gin"
 	"github.com/toolkits/pkg/logger"
 )

@@ -13,11 +13,23 @@ import (
 GlobalConfig 全局配置
 */
 type GlobalConfig struct {
-	Logger LoggerSection `json:"logger"`
-	DB     DBConfig      `json:"db"`
-	Campus CampusConfig  `json:"campus"`
-	Source SourceConfig  `json:"source"`
-	Http   HttpConfig    `json:"http"`
+	Logger       LoggerSection      `json:"logger"`
+	DB           DBConfig           `json:"db"`
+	Campus       CampusConfig       `json:"campus"`
+	Source       SourceConfig       `json:"source"`
+	AutoDownload AutoDownloadConfig `json:"autoDownload"`
+	Http         HttpConfig         `json:"http"`
+}
+
+/*
+AutoDownloadConfig 自动下载的配置
+*/
+type AutoDownloadConfig struct {
+	Enabled           bool   `json:"enabled"`
+	MaxmindLicenseKey string `json:"maxmindLicenseKey"`
+	TargetFilePath    string `json:"targetFilePath"`
+	Timeout           int    `json:"timeout"`
+	Interval          int    `json:"interval"`
 }
 
 /*
@@ -26,6 +38,7 @@ DBConfig DB 配置
 type DBConfig struct {
 	Maxmind  string `json:"maxmind"`
 	Qqzengip string `json:"qqzengip"`
+	Ipdb     string `json:"ipdb"`
 }
 
 /*
