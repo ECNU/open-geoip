@@ -140,6 +140,7 @@ chmod +x control
 | http.trustProxy                | array  | 被信任的代理的IP地址的数组，当服务被发布在反向代理后时必须正确配置，否则无法正确获取到 xff 的地址。                                                               |
 | http.cors                      | array  | 允许跨域访问的域名列表,配置内的域名可以跨域访问 `/myip` 和 `/myip/format` 接口                                                                |
 | http.x-api-key                 | string | 访问 openapi 接口所需的 API 密钥                                                                                             |
+| internal                       | array  | 内部数据库参数                                                                                                             | 
 | internal.enable                | bool   | 开启内部数据库                                                                                                             |
 | internal.source                | string | 内部数据库来源                                                                                                             |
 | internal.db                    | string | 内部数据库文件路径                                                                                                           |
