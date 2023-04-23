@@ -1,0 +1,3 @@
+﻿continent,country,province,city,district,isp,longitude,latitude,ip_subnet
+亚洲,中国,上海,上海,开源教育,企业内网,,,"192.168.0.0/24"
+亚洲,中国,上海,上海,开源教育,企业内网,,,"192.168.1.0/24"

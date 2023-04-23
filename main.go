@@ -20,6 +20,7 @@ import (
 func main() {
 	cfg := flag.String("c", "cfg.json", "configuration file")
 	version := flag.Bool("v", false, "show version")
+	csvFile := flag.String("csv", "", "internal file")
 	flag.Parse()
 
 	if *version {
@@ -28,6 +29,8 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
+	g.InitInternalDB(*csvFile)
+
 	srv := controller.InitGin(g.Config().Http.Listen)
 	g.InitLog(g.Config().Logger)
 
