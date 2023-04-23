@@ -73,6 +73,11 @@ chmod +x control
 			"172.16.0.0/12"
 		]
 	},
+    "internal": {
+        "source": "maxmind",
+        "enable": false,
+        "db": "internal.mmdb",
+    },
 	"db": {
 		"maxmind": "GeoLite2-City.mmdb",
 		"qqzengip": "",
@@ -98,43 +103,52 @@ chmod +x control
 }
 ```
 
-|配置项|类型|说明|
-|---|---|---|
-|logger|object|一个包含日志设置的部分|
-|logger.dir|string|存储日志文件的目录|
-|logger.level|string|日志的级别，比如DEBUG, INFO, WARN, 或ERROR|
-|logger.keepHours|number|保留日志文件的小时数，之后删除|
-|campus|object|一个包含园区内网信息的部分|
-|campus.continent|string|园区所在的洲|
-|campus.country|string|园区所在的国家|
-|campus.province|string|园区所在的省份|
-|campus.city|string|园区所在的城市|
-|campus.district|string|园区所在的区县（行政区）|
-|campus.isp|string|园区的ISP运营商|
-|campus.areaCode|string|园区所在的行政区划代（国内部分）|
-|campus.countryEnglish|string|园区所在国家的英文名|
-|campus.countryCode|string|园区所在国家的国家代码|
-|campus.longitude|string|园区的经度|
-|campus.latitude|string|园区的纬度|
-|campus.ips|array|属于该园区的IP范围的数组，命中这部分的IP地址，将使用配置文件中的内容进行返回|
-|db|object|一个包含数据库设置的部分|
-|db.maxmind|string|MaxMind GeoLite2数据库的文件的路径，如果 autDownload 配置为 true，那么这里的配置不会生效|
-|db.qqzengip|string|qqzengip数据库的文件的路径|
-|db.ipdb|string|ipip.net数据库的文件的路径|
-|source|object|一个包含IP信息来源设置的部分|
-|source.ipv4|string|IPv4信息的来源，可配置为 [maxmind](https://www.maxmind.com)/[qqzengip](https://www.qqzeng.com/)/[ipdb](https://www.ipip.net/)|
-|source.ipv6|string|IPv6信息的来源，可配置为 [maxmind](https://www.maxmind.com)/[qqzengip](https://www.qqzeng.com/)/[ipdb](https://www.ipip.net/)|
-|autoDownload|object|一个包含自动更新数据库的设置的部分|
-|autoDownload.enabled|bool|是否启用自动更新数据库|
-|autoDownload.MaxmindLicenseKey|string|MaxMind License Key，用于自动更新 `MaxMind GeoLite2` 数据库，也可以配置在环境变量 `MAXMIND_LICENSE_KEY` 中。如果都没有配置，那么 `maxmind` 的自动更新会报错|
-|autoDownload.targetFilePath|string|自动更新数据库的目标文件路径，如果不配置此参数，默认值是 `./`，自动更新数据库会下载到这个目录|
-|autoDownload.timeout|number|自动更新数据库的超时时间，单位是 second，如果不配置此参数，默认值是 3|
-|autoDownload.interval|number|自动更新数据库的间隔时间，单位是 hour，如果不配置此参数，默认值是24|
-|http|object|一个包含HTTP服务器设置的部分|
-|http.listen|string|HTTP服务器监听的地址和端口|
-|http.trustProxy|array|被信任的代理的IP地址的数组，当服务被发布在反向代理后时必须正确配置，否则无法正确获取到 xff 的地址。|
-|http.cors|array|允许跨域访问的域名列表,配置内的域名可以跨域访问 `/myip` 和 `/myip/format` 接口|
-|http.x-api-key|string|访问 openapi 接口所需的 API 密钥|
+| 配置项                            | 类型     | 说明                                                                                                                  |
+|--------------------------------|--------|---------------------------------------------------------------------------------------------------------------------|
+| logger                         | object | 一个包含日志设置的部分                                                                                                         |
+| logger.dir                     | string | 存储日志文件的目录                                                                                                           |
+| logger.level                   | string | 日志的级别，比如DEBUG, INFO, WARN, 或ERROR                                                                                   |
+| logger.keepHours               | number | 保留日志文件的小时数，之后删除                                                                                                     |
+| campus                         | object | 一个包含园区内网信息的部分                                                                                                       |
+| campus.continent               | string | 园区所在的洲                                                                                                              |
+| campus.country                 | string | 园区所在的国家                                                                                                             |
+| campus.province                | string | 园区所在的省份                                                                                                             |
+| campus.city                    | string | 园区所在的城市                                                                                                             |
+| campus.district                | string | 园区所在的区县（行政区）                                                                                                        |
+| campus.isp                     | string | 园区的ISP运营商                                                                                                           |
+| campus.areaCode                | string | 园区所在的行政区划代（国内部分）                                                                                                    |
+| campus.countryEnglish          | string | 园区所在国家的英文名                                                                                                          |
+| campus.countryCode             | string | 园区所在国家的国家代码                                                                                                         |
+| campus.longitude               | string | 园区的经度                                                                                                               |
+| campus.latitude                | string | 园区的纬度                                                                                                               |
+| campus.ips                     | array  | 属于该园区的IP范围的数组，命中这部分的IP地址，将使用配置文件中的内容进行返回                                                                            |
+| db                             | object | 一个包含数据库设置的部分                                                                                                        |
+| db.maxmind                     | string | MaxMind GeoLite2数据库的文件的路径，如果 autDownload 配置为 true，那么这里的配置不会生效                                                       |
+| db.qqzengip                    | string | qqzengip数据库的文件的路径                                                                                                   |
+| db.ipdb                        | string | ipip.net数据库的文件的路径                                                                                                   |
+| source                         | object | 一个包含IP信息来源设置的部分                                                                                                     |
+| source.ipv4                    | string | IPv4信息的来源，可配置为 [maxmind](https://www.maxmind.com)/[qqzengip](https://www.qqzeng.com/)/[ipdb](https://www.ipip.net/) |
+| source.ipv6                    | string | IPv6信息的来源，可配置为 [maxmind](https://www.maxmind.com)/[qqzengip](https://www.qqzeng.com/)/[ipdb](https://www.ipip.net/) |
+| autoDownload                   | object | 一个包含自动更新数据库的设置的部分                                                                                                   |
+| autoDownload.enabled           | bool   | 是否启用自动更新数据库                                                                                                         |
+| autoDownload.MaxmindLicenseKey | string | MaxMind License Key，用于自动更新 `MaxMind GeoLite2` 数据库，也可以配置在环境变量 `MAXMIND_LICENSE_KEY` 中。如果都没有配置，那么 `maxmind` 的自动更新会报错  |
+| autoDownload.targetFilePath    | string | 自动更新数据库的目标文件路径，如果不配置此参数，默认值是 `./`，自动更新数据库会下载到这个目录                                                                   |
+| autoDownload.timeout           | number | 自动更新数据库的超时时间，单位是 second，如果不配置此参数，默认值是 3                                                                             |
+| autoDownload.interval          | number | 自动更新数据库的间隔时间，单位是 hour，如果不配置此参数，默认值是24                                                                               |
+| http                           | object | 一个包含HTTP服务器设置的部分                                                                                                    |
+| http.listen                    | string | HTTP服务器监听的地址和端口                                                                                                     |
+| http.trustProxy                | array  | 被信任的代理的IP地址的数组，当服务被发布在反向代理后时必须正确配置，否则无法正确获取到 xff 的地址。                                                               |
+| http.cors                      | array  | 允许跨域访问的域名列表,配置内的域名可以跨域访问 `/myip` 和 `/myip/format` 接口                                                                |
+| http.x-api-key                 | string | 访问 openapi 接口所需的 API 密钥                                                                                             |
+| internal.enable                | bool   | 开启内部数据库                                                                                                             |
+| internal.source                | string | 内部数据库来源                                                                                                             |
+| internal.db                    | string | 内部数据库文件路径                                                                                                           |
+
+
+## 通过csv导入内部数据库
+```
+./open-geoip -csv internal.csv
+```
 
 ## API
 ### myip
