@@ -73,11 +73,11 @@ chmod +x control
 			"172.16.0.0/12"
 		]
 	},
-    "internal": {
-        "source": "maxmind",
-        "enable": false,
-        "db": "internal.mmdb",
-    },
+	"internal": {
+		"source": "maxmind", 
+		"enable": false, 
+		"db": "internal.mmdb"
+	},
 	"db": {
 		"maxmind": "GeoLite2-City.mmdb",
 		"qqzengip": "",
