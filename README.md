@@ -141,7 +141,7 @@ chmod +x control
 | http.cors                      | array  | 允许跨域访问的域名列表,配置内的域名可以跨域访问 `/myip` 和 `/myip/format` 接口                                                                |
 | http.x-api-key                 | string | 访问 openapi 接口所需的 API 密钥                                                                                             |
 | internal                       | array  | 内部数据库参数                                                                                                             | 
-| internal.enable                | bool   | 开启内部数据库                                                                                                             |
+| internal.enabled               | bool   | 开启内部数据库                                                                                                             |
 | internal.source                | string | 内部数据库来源                                                                                                             |
 | internal.db                    | string | 内部数据库文件路径                                                                                                           |
 

@@ -2,16 +2,14 @@ package models
 
 import (
 	"fmt"
-	"net"
-
-	"github.com/toolkits/pkg/logger"
-
 	"github.com/ECNU/open-geoip/g"
+	"github.com/toolkits/pkg/logger"
+	"net"
 )
 
 func (self IpGeo) ToString() string {
 	//只返回必要的部分，给前端先使用
-	res := fmt.Sprintf("%s %s %s %s %s %s", self.Continent, self.Country, self.Province, self.City, self.District, self.ISP)
+	res := fmt.Sprintf("%s %s %s %s %s %s %s %s %s", self.Continent, self.Country, self.CountryEnglish, self.CountryCode, self.AreaCode, self.Province, self.City, self.District, self.ISP)
 	return res
 }
 

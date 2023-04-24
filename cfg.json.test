@@ -1,0 +1,48 @@
+{
+	"logger": {
+		"dir": "logs/",
+		"level": "INFO",
+		"keepHours": 24
+	},
+    "internaldb": {
+        "source": "maxmind",
+        "enabled": false,
+        "db": "internal.mmdb"
+    },
+	"campus": {
+		"continent": "亚洲",
+		"country": "中国",
+		"province": "上海",
+		"city": "上海",
+		"district": "华东师范大学",
+		"isp": "校园网",
+		"areaCode": "310000",
+		"countryEnglish": "China",
+		"countryCode": "CN",
+		"longitude": "",
+		"latitude": "",
+		"ips": [
+			"10.0.0.0/8",
+			"192.168.0.0/16",
+			"172.16.0.0/12"
+		]
+	},
+    "db": {
+        "maxmind": "",
+        "qqzengip": "",
+        "ipdb":"city.free.ipdb"
+    },
+	"source": {
+		"ipv4": "ipdb",
+		"ipv6": "ipdb"
+	},
+	"AutoDownload":{
+		"enabled":false
+	},
+	"http": {
+		"listen": "0.0.0.0:80",
+		"trustProxy": ["127.0.0.1", "::1"],
+		"cors":["http://localhost"],
+		"x-api-key": "this-is-key"
+	}
+}

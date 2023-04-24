@@ -2,7 +2,6 @@ package g
 
 import (
 	"encoding/json"
-
 	"log"
 	"sync"
 
@@ -43,9 +42,9 @@ type DBConfig struct {
 }
 
 type InternalDBConfig struct {
-	Source string `json:"source"`
-	Enable bool   `json:"enable"`
-	DB     string `json:"db"`
+	Source  string `json:"source"`
+	Enabled bool   `json:"enabled"`
+	DB      string `json:"db"`
 }
 
 /*

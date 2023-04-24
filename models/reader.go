@@ -62,6 +62,7 @@ type InternalGeoIP struct {
 	Internal struct {
 		ISP      map[string]string `maxminddb:"isp"`
 		District map[string]string `maxminddb:"district"`
+		AreaCode string            `maxminddb:"areaCode"`
 	} `maxminddb:"internal"`
 }
 
@@ -94,16 +95,9 @@ func (e UnknownDatabaseTypeError) Error() string {
 }
 
 func (r *InternalReader) Metadata() maxminddb.Metadata {
-	return r.mmdbReader.Metadata
-}
 
-func (r *InternalReader) City(ipAddress net.IP) (*InternalGeoIP, error) {
-	if isCity&r.databaseType == 0 {
-		return nil, InvalidMethodError{"City", r.Metadata().DatabaseType}
-	}
-	var city InternalGeoIP
-	err := r.mmdbReader.Lookup(ipAddress, &city)
-	return &city, err
+	fmt.Printf("dsadasdasdsdas\n")
+	return r.mmdbReader.Metadata
 }
 
 func Open(file string) (*InternalReader, error) {
@@ -113,4 +107,18 @@ func Open(file string) (*InternalReader, error) {
 	}
 	dbType, err := getDBType(reader)
 	return &InternalReader{reader, dbType}, err
+}
+
+func (r *InternalReader) Close() error {
+	return r.mmdbReader.Close()
+}
+
+func (r *InternalReader) City(ipAddress net.IP) (*InternalGeoIP, error) {
+
+	if isCity&r.databaseType == 0 {
+		return nil, InvalidMethodError{"City", r.Metadata().DatabaseType}
+	}
+	var city InternalGeoIP
+	err := r.mmdbReader.Lookup(ipAddress, &city)
+	return &city, err
 }

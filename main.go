@@ -28,8 +28,14 @@ func main() {
 		os.Exit(0)
 	}
 
+	if *csvFile != "" {
+		fmt.Println("import csv file", *csvFile)
+		g.InitInternalDB(*csvFile)
+		os.Exit(0)
+	}
+
 	g.ParseConfig(*cfg)
-	g.InitInternalDB(*csvFile)
+	//g.InitInternalDB(*csvFile)
 
 	srv := controller.InitGin(g.Config().Http.Listen)
 	g.InitLog(g.Config().Logger)

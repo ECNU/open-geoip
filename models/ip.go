@@ -72,13 +72,14 @@ func InitReader() error {
 			}
 			ipReader.MaxMindReader = db
 		}
-		if g.Config().InternalDB.Enable {
-			db, err := Open(g.Config().InternalDB.DB)
-			if err != nil {
-				return err
-			}
-			ipReader.InternalMaxMindReader = db
+	}
+
+	if g.Config().InternalDB.Enabled {
+		db, err := Open(g.Config().InternalDB.DB)
+		if err != nil {
+			return err
 		}
+		ipReader.InternalMaxMindReader = db
 	}
 
 	return nil
@@ -179,6 +180,7 @@ func copyInternalGeoIP(src *InternalGeoIP, dst *IpGeo, language string) {
 		dst.City = src.City.City.Names[language]
 	}
 	dst.CountryCode = src.City.Country.IsoCode
+	dst.AreaCode = src.Internal.AreaCode
 	if len(src.City.Subdivisions) > 0 {
 		dst.Province = src.City.Subdivisions[0].Names[language]
 	}
@@ -196,11 +198,11 @@ func copyInternalGeoIP(src *InternalGeoIP, dst *IpGeo, language string) {
 
 func readInternalSource(ipNet net.IP, source, language string) (ipGeo IpGeo, err error) {
 	ipGeo.IP = ipNet.String()
-
 	switch source {
 	case "maxmind":
 
 		var record *InternalGeoIP
+
 		record, err = ipReader.InternalMaxMindReader.City(ipNet)
 
 		if err != nil {
@@ -208,6 +210,7 @@ func readInternalSource(ipNet net.IP, source, language string) (ipGeo IpGeo, err
 		}
 
 		copyInternalGeoIP(record, &ipGeo, language)
+		return
 	}
 
 	return
@@ -222,17 +225,16 @@ func GetIP(ipStr string, config g.SourceConfig) (ipGeo IpGeo, err error) {
 		err = fmt.Errorf("invalid IP address format: %s", ipStr)
 		return
 	}
-
 	// 本地优先
-	if g.Config().InternalDB.Enable {
+	if g.Config().InternalDB.Enabled {
 		ipGeo, err = readInternalSource(ipNet, g.Config().InternalDB.Source, language)
 
 		if err != nil {
 			return
 		}
 
-		// ToString 6个字段 为空是5
-		if len(ipGeo.ToString()) != 5 {
+		// ToString 9个字段 为空是8
+		if len(ipGeo.ToString()) != 8 {
 			return
 		}
 

@@ -1,24 +1,75 @@
 package main
 
 import (
+	"fmt"
+	"github.com/ECNU/open-geoip/controller"
+	"github.com/stretchr/testify/assert"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
-	"github.com/ECNU/open-geoip/controller"
 	"github.com/ECNU/open-geoip/g"
 	"github.com/ECNU/open-geoip/models"
 )
 
 func init() {
+	g.InitInternalDB("internal.csv")
 	g.ParseConfig("cfg.json.test")
 	err := models.InitReader()
 	if err != nil {
 		log.Fatalf("load geo db failed, %v", err)
 	}
+
+}
+
+func TestInternalDB(t *testing.T) {
+	g.Config().InternalDB.Enabled = true
+	err := models.InitReader()
+	if err != nil {
+		log.Fatalf("load geo db failed, %v", err)
+	}
+	httpServer := controller.InitGin(":8080")
+	// 创建一个测试请求
+	req, err := http.NewRequest("GET", "/ip?ip=192.168.0.1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// 创建一个响应记录器
+	w := httptest.NewRecorder()
+	// 调用测试服务器的处理函数
+	httpServer.Handler.ServeHTTP(w, req)
+	// 检查响应状态码是否为 200
+	assert.Equal(t, 200, w.Code)
+	// 检查响应内容是否包含 IP 地址
+	assert.Contains(t, w.Body.String(), "中国")
+
+	req, err = http.NewRequest("GET", "/ip?ip=2001:0db8:85a3:08d3:1319::1", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// 创建一个响应记录器
+	w = httptest.NewRecorder()
+	// 调用测试服务器的处理函数
+	httpServer.Handler.ServeHTTP(w, req)
+	// 检查响应状态码是否为 200
+	assert.Equal(t, 200, w.Code)
+	// 检查响应内容是否包含 IP 地址
+	assert.Contains(t, w.Body.String(), "中国")
+
+	req, err = http.NewRequest("GET", "/ip?ip=223.5.5.5", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// 创建一个响应记录器
+	w = httptest.NewRecorder()
+	// 调用测试服务器的处理函数
+	httpServer.Handler.ServeHTTP(w, req)
+	// 检查响应状态码是否为 200
+	assert.Equal(t, 200, w.Code)
+	// 检查响应内容是否包含 IP 地址
+	fmt.Printf("%v\n", w.Body.String())
+	assert.Contains(t, w.Body.String(), "ALIDNS")
 }
 
 func TestIndex(t *testing.T) {
@@ -68,6 +119,7 @@ func TestOpenAPI(t *testing.T) {
 	req.Header.Set("X-API-KEY", "this-is-key")
 	// 创建一个响应记录器
 	w := httptest.NewRecorder()
+
 	// 调用测试服务器的处理函数
 	httpServer.Handler.ServeHTTP(w, req)
 	// 检查响应状态码是否为 200

@@ -28,14 +28,6 @@ type Ips struct {
 
 func InitInternalDB(csvFile string) {
 
-	if config.InternalDB.Enable == false {
-		return
-	}
-
-	if csvFile == "" {
-		return
-	}
-
 	if !file.IsExist(csvFile) {
 		log.Fatalln("config file:", csvFile, "is not existent. maybe you need `mv cfg.example.json cfg.json`")
 	}
@@ -45,14 +37,12 @@ func InitInternalDB(csvFile string) {
 		log.Println("cannot init internal db:", err)
 		os.Exit(1)
 	}
-
+	//fmt.Printf("dasdasdasda\n")
 	err = saveMMDB(ips)
 	if err != nil {
 		log.Println("cannot init internal db:", err)
 		os.Exit(1)
 	}
-
-	return
 
 }
 
@@ -82,7 +72,6 @@ func saveMMDB(ips []*Ips) (err error) {
 	}
 
 	for _, ip := range ips {
-		//fmt.Println("%v\n", client)
 
 		_, sreNet, err := net.ParseCIDR(ip.IPSubnet)
 
@@ -120,7 +109,9 @@ func saveMMDB(ips []*Ips) (err error) {
 			"country": mmdbtype.Map{
 				"names": mmdbtype.Map{
 					"zh-CN": mmdbtype.String(ip.Country),
+					"en":    mmdbtype.String(ip.CountryEnglish),
 				},
+				"iso_code": mmdbtype.String(ip.CountryCode),
 			},
 			"registered_country": mmdbtype.Map{
 				"names": mmdbtype.Map{
@@ -134,6 +125,7 @@ func saveMMDB(ips []*Ips) (err error) {
 				"district": mmdbtype.Map{
 					"zh-CN": mmdbtype.String(ip.District),
 				},
+				"areaCode": mmdbtype.String(ip.AreaCode),
 			},
 		}
 
