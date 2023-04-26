@@ -2,7 +2,6 @@ package g
 
 import (
 	"encoding/json"
-
 	"log"
 	"sync"
 
@@ -16,6 +15,7 @@ type GlobalConfig struct {
 	Logger       LoggerSection      `json:"logger"`
 	DB           DBConfig           `json:"db"`
 	Campus       CampusConfig       `json:"campus"`
+	InternalDB   InternalDBConfig   `json:"internaldb"`
 	Source       SourceConfig       `json:"source"`
 	AutoDownload AutoDownloadConfig `json:"autoDownload"`
 	Http         HttpConfig         `json:"http"`
@@ -39,6 +39,12 @@ type DBConfig struct {
 	Maxmind  string `json:"maxmind"`
 	Qqzengip string `json:"qqzengip"`
 	Ipdb     string `json:"ipdb"`
+}
+
+type InternalDBConfig struct {
+	Source  string `json:"source"`
+	Enabled bool   `json:"enabled"`
+	DB      string `json:"db"`
 }
 
 /*

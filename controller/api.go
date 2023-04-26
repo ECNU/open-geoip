@@ -14,7 +14,6 @@ func geoIpApi(c *gin.Context) {
 		c.String(http.StatusOK, "不是合法的IP地址")
 		return
 	}
-
 	c.String(http.StatusOK, models.SearchIP(ipAddr).ToString())
 }
 

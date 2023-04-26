@@ -2,13 +2,13 @@ package models
 
 import (
 	"fmt"
+	"github.com/oschwald/geoip2-golang"
 	"net"
 	"strings"
 
 	"github.com/ECNU/open-geoip/g"
 	"github.com/ECNU/open-geoip/util"
 	"github.com/ipipdotnet/ipdb-go"
-	"github.com/oschwald/geoip2-golang"
 )
 
 type IpGeo struct {
@@ -27,9 +27,10 @@ type IpGeo struct {
 }
 
 type IpReader struct {
-	MaxMindReader *geoip2.Reader
-	QqzengReader  *IpSearch
-	IpdbReader    *ipdb.City
+	MaxMindReader         *geoip2.Reader
+	InternalMaxMindReader *InternalReader
+	QqzengReader          *IpSearch
+	IpdbReader            *ipdb.City
 }
 
 var ipReader *IpReader
@@ -63,6 +64,7 @@ func InitReader() error {
 				return err
 			}
 			ipReader.MaxMindReader = db
+
 		} else {
 			db, err := geoip2.Open(g.Config().DB.Maxmind)
 			if err != nil {
@@ -70,6 +72,14 @@ func InitReader() error {
 			}
 			ipReader.MaxMindReader = db
 		}
+	}
+
+	if g.Config().InternalDB.Enabled {
+		db, err := Open(g.Config().InternalDB.DB)
+		if err != nil {
+			return err
+		}
+		ipReader.InternalMaxMindReader = db
 	}
 
 	return nil
@@ -89,7 +99,7 @@ func copyIPdb(src *ipdb.CityInfo, dst *IpGeo, language string) {
 	return
 }
 
-//Todo 国际化拓展
+// Todo 国际化拓展
 func switchIpdbLanguage(lan string) string {
 	switch lan {
 	case "zh-CN":
@@ -101,14 +111,19 @@ func switchIpdbLanguage(lan string) string {
 
 func readSource(ipNet net.IP, source, language string) (ipGeo IpGeo, err error) {
 	ipGeo.IP = ipNet.String()
+
 	switch source {
 	case "maxmind":
+
 		var record *geoip2.City
 		record, err = ipReader.MaxMindReader.City(ipNet)
+
 		if err != nil {
 			return
 		}
+
 		copyGeoIP(record, &ipGeo, language)
+
 		return
 	case "qqzengip":
 		ipGeo = ipReader.QqzengReader.Get(ipNet.String())
@@ -147,6 +162,57 @@ func copyGeoIP(src *geoip2.City, dst *IpGeo, language string) {
 	}
 	dst.Latitude = fmt.Sprintf("%f", src.Location.Latitude)
 	dst.Longitude = fmt.Sprintf("%f", src.Location.Longitude)
+
+	return
+}
+
+func copyInternalGeoIP(src *InternalGeoIP, dst *IpGeo, language string) {
+	if _, ok := src.City.Continent.Names[language]; ok {
+		dst.Continent = src.City.Continent.Names[language]
+	}
+	if _, ok := src.City.Country.Names[language]; ok {
+		dst.Country = src.City.Country.Names[language]
+	}
+	if _, ok := src.City.Country.Names["en"]; ok {
+		dst.CountryEnglish = src.City.Country.Names["en"]
+	}
+	if _, ok := src.City.City.Names[language]; ok {
+		dst.City = src.City.City.Names[language]
+	}
+	dst.CountryCode = src.City.Country.IsoCode
+	dst.AreaCode = src.Internal.AreaCode
+	if len(src.City.Subdivisions) > 0 {
+		dst.Province = src.City.Subdivisions[0].Names[language]
+	}
+	if _, ok := src.Internal.ISP[language]; ok {
+		dst.ISP = src.Internal.ISP[language]
+	}
+	if _, ok := src.Internal.District[language]; ok {
+		dst.District = src.Internal.District[language]
+	}
+	dst.Latitude = fmt.Sprintf("%f", src.City.Location.Latitude)
+	dst.Longitude = fmt.Sprintf("%f", src.City.Location.Longitude)
+
+	return
+}
+
+func readInternalSource(ipNet net.IP, source, language string) (ipGeo IpGeo, err error) {
+	ipGeo.IP = ipNet.String()
+	switch source {
+	case "maxmind":
+
+		var record *InternalGeoIP
+
+		record, err = ipReader.InternalMaxMindReader.City(ipNet)
+
+		if err != nil {
+			return
+		}
+
+		copyInternalGeoIP(record, &ipGeo, language)
+		return
+	}
+
 	return
 }
 
@@ -159,8 +225,24 @@ func GetIP(ipStr string, config g.SourceConfig) (ipGeo IpGeo, err error) {
 		err = fmt.Errorf("invalid IP address format: %s", ipStr)
 		return
 	}
+	// 本地优先
+	if g.Config().InternalDB.Enabled {
+		ipGeo, err = readInternalSource(ipNet, g.Config().InternalDB.Source, language)
+
+		if err != nil {
+			return
+		}
+
+		// ToString 9个字段 为空是8
+		if len(ipGeo.ToString()) != 8 {
+			return
+		}
+
+	}
+
 	//ipv6
 	if strings.Contains(ipStr, ":") {
+
 		ipGeo, err = readSource(ipNet, config.IPv6, language)
 		if err != nil {
 			return

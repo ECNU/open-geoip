@@ -58,9 +58,9 @@ func Test_IpCheck(t *testing.T) {
 
 func Test_GetIP(t *testing.T) {
 
-	res, _ := GetIP("202.120.92.60", g.Config().Source)
+	res, _ := GetIP("192.168.0.1", g.Config().Source)
 	assert.Equal(t, res.Country, "中国")
-	res, _ = GetIP("2001:da8:8005:a492::60", g.Config().Source)
+	res, _ = GetIP("2001:0db8:85a3:08d3:1319::1", g.Config().Source)
 	assert.Equal(t, res.Country, "中国")
 
 	if file.IsExist("city.free.ipdb") {
@@ -84,12 +84,12 @@ func Test_GetIP(t *testing.T) {
 
 func TestSearchIP(t *testing.T) {
 
-	res := SearchIP("192.168.100.1")
-	assert.Equal(t, res.ISP, "校园网")
-	assert.Equal(t, res.IP, "192.168.100.1")
-	res = SearchIP("2001:da8:8005::1")
+	res := SearchIP("192.168.0.1")
+	assert.Equal(t, res.Province, "上海")
+	assert.Equal(t, res.IP, "192.168.0.1")
+	res = SearchIP("2001:db8:85a3:8d3:1319::1")
 	assert.Equal(t, res.Country, "中国")
-	assert.Equal(t, res.IP, "2001:da8:8005::1")
+	assert.Equal(t, res.IP, "2001:db8:85a3:8d3:1319::1")
 
 	//非法的请求
 	res = SearchIP("202..1")

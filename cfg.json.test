@@ -4,6 +4,11 @@
 		"level": "INFO",
 		"keepHours": 24
 	},
+    "internaldb": {
+        "source": "maxmind",
+        "enabled": false,
+        "db": "internal.mmdb"
+    },
 	"campus": {
 		"continent": "亚洲",
 		"country": "中国",
@@ -22,12 +27,17 @@
 			"172.16.0.0/12"
 		]
 	},
+    "db": {
+        "maxmind": "",
+        "qqzengip": "",
+        "ipdb":"city.free.ipdb"
+    },
 	"source": {
-		"ipv4": "maxmind",
-		"ipv6": "maxmind"
+		"ipv4": "ipdb",
+		"ipv6": "ipdb"
 	},
 	"AutoDownload":{
-		"enabled":true
+		"enabled":false
 	},
 	"http": {
 		"listen": "0.0.0.0:80",
