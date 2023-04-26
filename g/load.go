@@ -37,7 +37,7 @@ func InitInternalDB(csvFile string) {
 		log.Println("cannot init internal db:", err)
 		os.Exit(1)
 	}
-	//fmt.Printf("dasdasdasda\n")
+
 	err = saveMMDB(ips)
 	if err != nil {
 		log.Println("cannot init internal db:", err)

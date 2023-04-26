@@ -76,7 +76,7 @@ chmod +x control
 	"internal": {
 		"source": "maxmind", 
 		"enable": false, 
-		"db": "internal.mmdb"
+		"db": "GeoLite2-City.mmdb.test"
 	},
 	"db": {
 		"maxmind": "GeoLite2-City.mmdb",
@@ -109,19 +109,6 @@ chmod +x control
 | logger.dir                     | string | 存储日志文件的目录                                                                                                           |
 | logger.level                   | string | 日志的级别，比如DEBUG, INFO, WARN, 或ERROR                                                                                   |
 | logger.keepHours               | number | 保留日志文件的小时数，之后删除                                                                                                     |
-| campus                         | object | 一个包含园区内网信息的部分                                                                                                       |
-| campus.continent               | string | 园区所在的洲                                                                                                              |
-| campus.country                 | string | 园区所在的国家                                                                                                             |
-| campus.province                | string | 园区所在的省份                                                                                                             |
-| campus.city                    | string | 园区所在的城市                                                                                                             |
-| campus.district                | string | 园区所在的区县（行政区）                                                                                                        |
-| campus.isp                     | string | 园区的ISP运营商                                                                                                           |
-| campus.areaCode                | string | 园区所在的行政区划代（国内部分）                                                                                                    |
-| campus.countryEnglish          | string | 园区所在国家的英文名                                                                                                          |
-| campus.countryCode             | string | 园区所在国家的国家代码                                                                                                         |
-| campus.longitude               | string | 园区的经度                                                                                                               |
-| campus.latitude                | string | 园区的纬度                                                                                                               |
-| campus.ips                     | array  | 属于该园区的IP范围的数组，命中这部分的IP地址，将使用配置文件中的内容进行返回                                                                            |
 | db                             | object | 一个包含数据库设置的部分                                                                                                        |
 | db.maxmind                     | string | MaxMind GeoLite2数据库的文件的路径，如果 autDownload 配置为 true，那么这里的配置不会生效                                                       |
 | db.qqzengip                    | string | qqzengip数据库的文件的路径                                                                                                   |
