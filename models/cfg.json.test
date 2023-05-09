@@ -5,7 +5,7 @@
 		"keepHours": 24
 	},
     "db": {
-        "maxmind": "GeoLite2-City.mmdb.test",
+        "maxmind": "internal.mmdb",
         "qqzengip": "",
         "ipdb":""
     },

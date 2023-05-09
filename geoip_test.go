@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/ECNU/open-geoip/controller"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/ECNU/open-geoip/controller"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/ECNU/open-geoip/g"
 	"github.com/ECNU/open-geoip/models"
@@ -44,7 +45,7 @@ func TestInternalDB(t *testing.T) {
 	// 检查响应内容是否包含 IP 地址
 	assert.Contains(t, w.Body.String(), "中国")
 
-	req, err = http.NewRequest("GET", "/ip?ip=2001:0db8:85a3:08d3:1319::1", nil)
+	req, err = http.NewRequest("GET", "/ip?ip=fd12:3456:789a:bcde::1", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

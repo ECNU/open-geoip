@@ -60,7 +60,7 @@ func Test_GetIP(t *testing.T) {
 
 	res, _ := GetIP("192.168.0.1", g.Config().Source)
 	assert.Equal(t, res.Country, "中国")
-	res, _ = GetIP("2001:0db8:85a3:08d3:1319::1", g.Config().Source)
+	res, _ = GetIP("fd12:3456:789a:bcde::1", g.Config().Source)
 	assert.Equal(t, res.Country, "中国")
 
 	if file.IsExist("city.free.ipdb") {
@@ -83,13 +83,13 @@ func Test_GetIP(t *testing.T) {
 }
 
 func TestSearchIP(t *testing.T) {
-
+	g.Config().Source.IPv4 = "maxmind"
 	res := SearchIP("192.168.0.1")
 	assert.Equal(t, res.Province, "上海")
 	assert.Equal(t, res.IP, "192.168.0.1")
-	res = SearchIP("2001:db8:85a3:8d3:1319::1")
+	res = SearchIP("fd12:3456:789a:bcde::1")
 	assert.Equal(t, res.Country, "中国")
-	assert.Equal(t, res.IP, "2001:db8:85a3:8d3:1319::1")
+	assert.Equal(t, res.IP, "fd12:3456:789a:bcde::1")
 
 	//非法的请求
 	res = SearchIP("202..1")

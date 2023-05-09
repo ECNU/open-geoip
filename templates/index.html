@@ -32,6 +32,7 @@
             <div class="col-lg-8 text-center">
                 <h1 class="home-title mt-3">open-geoip</h1>
                 <p class="home-desc text-muted mt-3" id="show-myip"></p>
+                <p class="home-desc text-muted mt-3" id="show-mylocation"></p>
                 <div class="mt-5 home-form rounded" style="z-index: 10;position: inherit;">
                     <div class="row">
                         <div class="col-md-9">
@@ -103,6 +104,7 @@
     // jqeury
     $(function () {
         getMyIp();
+        getMyLocation();
 
         // query ip address function
         function getIp() {
@@ -169,7 +171,17 @@
         });
     }
 
-    //getMyIp()
+    // 获取mylocation的方法
+    function getMyLocation() {
+        $.ajax({
+            type: "GET",
+            url: "/mylocation",
+            success: function (res, status) {
+                $("#show-mylocation").html(res)
+            },
+            dataType: "text"
+        });
+    }
 </script>
 <script src="../assets/libs/bootstrap/bootstrap.bundle.min.js"></script>
 </body>

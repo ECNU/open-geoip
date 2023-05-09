@@ -44,6 +44,10 @@ func Routes(r *gin.Engine) {
 	myip.GET("/myip", getMyIP)
 	//json 结构化的 ip 地址
 	myip.GET("/myip/format", getMyIPFormat)
+	// 仅我的地理位置
+	myip.GET("/mylocation", getMyLocation)
+	//json 结构化的我的地理位置
+	myip.GET("/mylocation/format", getMyLocationFormat)
 
 	rest := r.Group("/api/v1")
 	rest.Use(XAPICheckMidd)

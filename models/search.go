@@ -2,9 +2,10 @@ package models
 
 import (
 	"fmt"
+	"net"
+
 	"github.com/ECNU/open-geoip/g"
 	"github.com/toolkits/pkg/logger"
-	"net"
 )
 
 func (self IpGeo) ToString() string {
@@ -16,12 +17,6 @@ func (self IpGeo) ToString() string {
 func SearchIP(ipStr string) (result IpGeo) {
 	//无论发生什么，IP 永远返回
 	result.IP = ipStr
-
-	////先检查campus ip，匹配则直接返回 District=华东师范大学， ISP=校园网，经纬度给空字符串
-	//if IPCheck(ipStr, g.Config().Campus.IPs) {
-	//	copier.Copy(&result, g.Config().Campus)
-	//	return
-	//}
 
 	var err error
 	result, err = GetIP(ipStr, g.Config().Source)

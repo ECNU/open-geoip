@@ -6,7 +6,7 @@
 	},
 	"internaldb": {
 		"source": "maxmind",
-		"enable": true,
+		"enabled": false,
 		"db": "internal.mmdb"
 	},
 	"db": {

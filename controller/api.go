@@ -28,6 +28,14 @@ func getMyIPFormat(c *gin.Context) {
 	c.JSON(http.StatusOK, SuccessRes(res))
 }
 
+func getMyLocation(c *gin.Context) {
+	c.String(http.StatusOK, models.SearchIP(c.ClientIP()).ToString())
+}
+
+func getMyLocationFormat(c *gin.Context) {
+	c.JSON(http.StatusOK, SuccessRes(models.SearchIP(c.ClientIP())))
+}
+
 func openGetIpApi(c *gin.Context) {
 	ipAddr := c.Query("ip")
 	if !models.CheckIPValid(ipAddr) {
