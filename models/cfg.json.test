@@ -5,7 +5,7 @@
 		"keepHours": 24
 	},
     "db": {
-        "maxmind": "internal.mmdb",
+        "maxmind": "internal.mmdb.test",
         "qqzengip": "",
         "ipdb":""
     },
