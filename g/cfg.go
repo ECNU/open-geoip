@@ -13,12 +13,26 @@ GlobalConfig 全局配置
 */
 type GlobalConfig struct {
 	Logger       LoggerSection      `json:"logger"`
+	Redis        RedisConfig        `json:"redis"`
 	DB           DBConfig           `json:"db"`
 	Campus       CampusConfig       `json:"campus"`
 	InternalDB   InternalDBConfig   `json:"internaldb"`
 	Source       SourceConfig       `json:"source"`
 	AutoDownload AutoDownloadConfig `json:"autoDownload"`
+	RateLimit    RateLimitConfig    `json:"rateLimit"`
 	Http         HttpConfig         `json:"http"`
+}
+
+/*
+RedisConfig 全局配置
+*/
+type RedisConfig struct {
+	Dsn          string `json:"dsn"`
+	MaxIdle      int    `json:"maxIdle"`
+	ConnTimeout  int    `json:"connTimeout"`
+	ReadTimeout  int    `json:"readTimeout"`
+	WriteTimeout int    `json:"writeTimeout"`
+	Password     string `json:"password"`
 }
 
 /*
@@ -41,10 +55,23 @@ type DBConfig struct {
 	Ipdb     string `json:"ipdb"`
 }
 
+/*
+InternalDBConfi 内部数据库
+*/
 type InternalDBConfig struct {
 	Source  string `json:"source"`
 	Enabled bool   `json:"enabled"`
 	DB      string `json:"db"`
+}
+
+/*
+RateLimitConfig 限流配置
+*/
+type RateLimitConfig struct {
+	Enabled bool `json:"enabled"`
+	Minute  int  `json:"minute"`
+	Hour    int  `json:"hour"`
+	Day     int  `json:"day"`
 }
 
 /*

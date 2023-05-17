@@ -35,7 +35,10 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
-	//g.InitInternalDB(*csvFile)
+	// init redis pool only ratelimit enbaled
+	if g.Config().RateLimit.Enabled {
+		g.InitRedisConnPool()
+	}
 
 	srv := controller.InitGin(g.Config().Http.Listen)
 	g.InitLog(g.Config().Logger)

@@ -52,6 +52,8 @@ func Routes(r *gin.Engine) {
 	rest := r.Group("/api/v1")
 	rest.Use(XAPICheckMidd)
 	rest.GET("/network/ip", openGetIpApi)
+	rest.DELETE("/ratelimit", clearRateLimit)
+	rest.GET("/ratelimit", getRateLimit)
 
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{

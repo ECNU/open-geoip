@@ -4,6 +4,14 @@
 		"level": "DEBUG",
 		"keepHours": 24
 	},
+	"redis": {
+		"dsn": "127.0.0.1:6379",
+		"maxIdle": 5,
+		"connTimeout": 5,
+		"readTimeout": 5,
+		"writeTimeout": 5,
+		"password": ""
+	},
 	"internaldb": {
 		"source": "maxmind",
 		"enabled": false,

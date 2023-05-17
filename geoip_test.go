@@ -17,6 +17,7 @@ import (
 func init() {
 	g.InitInternalDB("internal.csv")
 	g.ParseConfig("cfg.json.test")
+	g.InitRedisConnPool()
 	err := models.InitReader()
 	if err != nil {
 		log.Fatalf("load geo db failed, %v", err)
@@ -71,6 +72,8 @@ func TestInternalDB(t *testing.T) {
 	// 检查响应内容是否包含 IP 地址
 	fmt.Printf("%v\n", w.Body.String())
 	assert.Contains(t, w.Body.String(), "ALIDNS")
+	//测完了关闭，不干扰其他测试用例
+	g.Config().InternalDB.Enabled = false
 }
 
 func TestIndex(t *testing.T) {

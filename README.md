@@ -2,6 +2,27 @@
 Open-GeoIP: 简单且高性能的 IP 地址地理信息查询服务
 
 ![](https://github.com/ECNU/open-geoip/blob/main/demo.jpg?raw=true)
+
+- [Open-GeoIP](#open-geoip)
+	- [安装运行](#安装运行)
+		- [二进制直接运行](#二进制直接运行)
+		- [systemctl 托管](#systemctl-托管)
+		- [数据库自动更新](#数据库自动更新)
+			- [maxmind](#maxmind)
+		- [编译打包](#编译打包)
+		- [定制页面](#定制页面)
+	- [配置说明](#配置说明)
+	- [通过csv导入内部数据库](#通过csv导入内部数据库)
+	- [限流方案](#限流方案)
+	- [高可用与扩展性](#高可用与扩展性)
+	- [API](#api)
+		- [myip](#myip)
+		- [mylocation](#mylocation)
+		- [searchapi](#searchapi)
+		- [openapi](#openapi)
+	- [benchmark](#benchmark)
+	- [鸣谢](#鸣谢)
+
 ## 安装运行
 
 ### 二进制直接运行
@@ -55,23 +76,13 @@ chmod +x control
 		"level": "DEBUG",
 		"keepHours": 24
 	},
-	"campus": {
-		"continent": "亚洲",
-		"country": "中国",
-		"province": "上海",
-		"city": "上海",
-		"district": "华东师范大学",
-		"isp": "校园网",
-		"areaCode": "310000",
-		"countryEnglish": "China",
-		"countryCode": "CN",
-		"longitude": "",
-		"latitude": "",
-		"ips": [
-			"10.0.0.0/8",
-			"192.168.0.0/16",
-			"172.16.0.0/12"
-		]
+	"redis": {
+		"dsn": "127.0.0.1:6379",
+		"maxIdle": 5,
+		"connTimeout": 5,
+		"readTimeout": 5,
+		"writeTimeout": 5,
+		"password": ""
 	},
 	"internal": {
 		"source": "maxmind", 
@@ -94,6 +105,12 @@ chmod +x control
 		"timeout":3,
 		"interval":24
 	},
+	"rateLimit": {
+		"enabled": false,
+		"minute": 100,
+		"hour": 1000,
+		"day": 10000
+	},
 	"http": {
 		"listen": "0.0.0.0:80",
 		"trustProxy": ["127.0.0.1", "::1"],
@@ -109,6 +126,17 @@ chmod +x control
 | logger.dir                     | string | 存储日志文件的目录                                                                                                           |
 | logger.level                   | string | 日志的级别，比如DEBUG, INFO, WARN, 或ERROR                                                                                   |
 | logger.keepHours               | number | 保留日志文件的小时数，之后删除                                                                                                     |
+| redis | object | redis 配置参数，配合限流策略使用 |
+| redis.dsn | string | redis 的连接地址 |
+| redis.maxIdle | number | redis 的最大空闲连接数 |
+| redis.connTimeout | number | redis 的连接超时时间，单位是 second |
+| redis.readTimeout | number | redis 的读取超时时间，单位是 second |
+| redis.writeTimeout | number | redis 的写入超时时间，单位是 second |
+| redis.password | string | redis 的密码 |
+| internal                       | object  | 内部数据库参数                                                                                                             | 
+| internal.enabled               | bool   | 开启内部数据库                                                                                                             |
+| internal.source                | string | 内部数据库来源                                                                                                             |
+| internal.db                    | string | 内部数据库文件路径      
 | db                             | object | 一个包含数据库设置的部分                                                                                                        |
 | db.maxmind                     | string | MaxMind GeoLite2数据库的文件的路径，如果 autDownload 配置为 true，那么这里的配置不会生效                                                       |
 | db.qqzengip                    | string | qqzengip数据库的文件的路径                                                                                                   |
@@ -122,20 +150,34 @@ chmod +x control
 | autoDownload.targetFilePath    | string | 自动更新数据库的目标文件路径，如果不配置此参数，默认值是 `./`，自动更新数据库会下载到这个目录                                                                   |
 | autoDownload.timeout           | number | 自动更新数据库的超时时间，单位是 second，如果不配置此参数，默认值是 3                                                                             |
 | autoDownload.interval          | number | 自动更新数据库的间隔时间，单位是 hour，如果不配置此参数，默认值是24                                                                               |
+| rateLimit                      | object | 一个包含限流设置的部分                                                                                                         |
+| rateLimit.enabled              | bool   | 是否启用限流策略                                                                                                             |
+| rateLimit.minute               | number | 每分钟最多访问次, 0 表示不限制数                                                                                                           |
+| rateLimit.hour                 | number | 每小时最多访问次, 0 表示不限制数                                                                                                           |
+| rateLimit.day                  | number | 每天最多访问次, 0 表示不限制数                                                                                                             |
 | http                           | object | 一个包含HTTP服务器设置的部分                                                                                                    |
 | http.listen                    | string | HTTP服务器监听的地址和端口                                                                                                     |
 | http.trustProxy                | array  | 被信任的代理的IP地址的数组，当服务被发布在反向代理后时必须正确配置，否则无法正确获取到 xff 的地址。                                                               |
 | http.cors                      | array  | 允许跨域访问的域名列表,配置内的域名可以跨域访问 `/myip` 和 `/myip/format` 接口                                                                |
-| http.x-api-key                 | string | 访问 openapi 接口所需的 API 密钥                                                                                             |
-| internal                       | array  | 内部数据库参数                                                                                                             | 
-| internal.enabled               | bool   | 开启内部数据库                                                                                                             |
-| internal.source                | string | 内部数据库来源                                                                                                             |
-| internal.db                    | string | 内部数据库文件路径                                                                                                           |
-
-
+| http.x-api-key                 | string | 访问 openapi 接口所需的 API 密钥                                                                                             |                                                                                                     |
 ## 通过csv导入内部数据库
 ```
 ./open-geoip -csv internal.csv
+```
+
+## 限流方案
+Open-GeoIP 通过 redis 记录每个IP地址的访问次数，当超过阈值时，对该IP进行限制访问。支持分钟，小时，天 三种颗粒的计数策略，可以通过配置文件中的 ratelimit 的部分进行配置，
+
+
+## 高可用与扩展性
+Open-GeoIP 是无状态的，因此可以任意的进行横向扩展并通过负载均衡实现高可用。在启用限流方案时，多个 Open-GeoIP 可以通过共享同一个 Redis 服务实现限流计数的一致性。以下示例表示开启了限流策略，并限制了每分钟最多访问 100 次，每小时最多访问 1000 次，每天最多访问 10000 次。
+```json
+	"rateLimit": {
+		"enabled": true,
+		"minute": 100,
+		"hour": 1000,
+		"day": 10000
+	},
 ```
 
 ## API
@@ -157,10 +199,28 @@ myip 的接口用于返回请求者的 IP 地址，对于一些无浏览器的�
 # {"errCode":0,"errMsg":"success","requestId":"0f40823e-04ce-4def-9af2-71e7e1403ec8","data":{"ip":"192.168.0.100"}}
 ```
 
+### mylocation
+
+mylocation 的接口用于返回请求者的 IP 地址对应的物理位置。
+
+它也可以被配置了 CORS 的网站通过前端调用
+
+提供了简单字符串与 json 格式化两种风格接口。
+
+```
+# curl http://localhost/mylocation
+# 保留地址
+```
+
+```
+# curl http://localhost/mylocation/format
+# {"errCode":0,"errMsg":"success","requestId":"c2e8c50e-b55f-455a-a9d4-d209acd20ab9","data":{"ip":"::1","continent":"保留地址","country":"","province":"","city":"","district":"","isp":"","areaCode":"","countryEnglish":"","countryCode":"","longitude":"","latitude":""}}
+```
+
 ### searchapi
 searchapi 接口面向浏览器，提供了一个 IP 地址的查询接口，并输出转换好的字符串以简化前端解析。
 
-这个接口受验证码和限流措施的保护，以防范可能的恶意爬虫（ToDo）
+这个接口受验证码（todo）和限流措施的保护，以防范可能的恶意爬虫
 
 他访问的路径是 `http://localhost/ip`
 
