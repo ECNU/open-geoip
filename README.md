@@ -307,8 +307,8 @@ ok  	github.com/ECNU/open-geoip	7.044s
 
 感谢他们的开源精神。
 
-- `web` 服务 —— [gin](github.com/gin-gonic/gin) 
-- `maxmind` 解析 —— [geoip2-golang](github.com/oschwald/geoip2-golang)
-- `maxming` 自动更新 —— [go-geoip](github.com/pieterclaerhout/go-geoip)
-- `ipdb` 解析 —— [ipdb-go](github.com/ipipdotnet/ipdb-go)
-- `qqzengip` 解析 —— [qqzeng-ip](https://github.com/zengzhan/qqzeng-ip)
+- `web` 服务 —— [gin](https://github.com/gin-gonic/gin) 
+- `maxmind` 解析 —— [geoip2-golang](https://github.com/oschwald/geoip2-golang)
+- `maxming` 自动更新 —— [go-geoip](https://github.com/pieterclaerhout/go-geoip)
+- `ipdb` 解析 —— [ipdb-go](https://github.com/ipipdotnet/ipdb-go)
+- `qqzengip` 解析 —— [qqzeng-ip](https://https://github.com/zengzhan/qqzeng-ip)
