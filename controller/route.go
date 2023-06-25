@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/ECNU/open-geoip/g"
 	"github.com/ECNU/open-geoip/util"
@@ -56,12 +58,32 @@ func Routes(r *gin.Engine) {
 	rest.GET("/ratelimit", getRateLimit)
 
 	r.GET("/", func(c *gin.Context) {
+		username, _ := c.Cookie("username")
+		nickname, _ := c.Cookie("nickname")
+		oauthUrl := fmt.Sprintf("%s?scope=%s&redirect_uri=%s&response_type=code&client_id=%s", g.Config().Oauth.SsoAddr, strings.Join(g.Config().Oauth.Scopes, " "), g.Config().Oauth.RedirectURL, g.Config().Oauth.ClientId)
 		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "主页"})
+			"title": "主页", "sso": g.Config().SSO, "oauth": g.Config().Oauth, "oauthUrl": oauthUrl, "username": username, "nickname": nickname})
 	})
 	r.GET("/version", func(c *gin.Context) {
 		c.String(http.StatusOK, g.VERSION)
 	})
+
+	r.GET("/logout", func(c *gin.Context) {
+
+		username, _ := c.Cookie("username")
+		nickname, _ := c.Cookie("nickname")
+
+		//c.Redirect(302, g.Config().Oauth.LogoutAddr)
+		c.SetCookie("nickname", nickname, -1, "/", "", false, true)
+		c.SetCookie("username", username, -1, "/", "", false, true)
+		c.Redirect(http.StatusMovedPermanently, g.Config().Oauth.LogoutAddr)
+		//c.String(http.StatusOK, g.VERSION)
+	})
+
+	// sso认证回调
+	ssoCallback := r.Group("/auth")
+	// oauth
+	ssoCallback.GET("/callback/oauth", OauthAuth)
 }
 
 func CORS() gin.HandlerFunc {

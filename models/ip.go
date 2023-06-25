@@ -216,7 +216,7 @@ func readInternalSource(ipNet net.IP, source, language string) (ipGeo IpGeo, err
 	return
 }
 
-func GetIP(ipStr string, config g.SourceConfig) (ipGeo IpGeo, err error) {
+func GetIP(ipStr string, config g.SourceConfig, isApi bool, isAuth bool) (ipGeo IpGeo, err error) {
 	//ToDO 支持国际化
 	language := "zh-CN"
 	ipGeo.IP = ipStr
@@ -227,15 +227,27 @@ func GetIP(ipStr string, config g.SourceConfig) (ipGeo IpGeo, err error) {
 	}
 	// 本地优先
 	if g.Config().InternalDB.Enabled {
-		ipGeo, err = readInternalSource(ipNet, g.Config().InternalDB.Source, language)
 
-		if err != nil {
-			return
+		enableInternalDB := true
+
+		if isApi == false {
+			if g.Config().InternalDB.Auth {
+				if isAuth == false {
+					enableInternalDB = false
+				}
+			}
 		}
 
-		// ToString 9个字段 为空是8
-		if len(ipGeo.ToString()) != 8 {
-			return
+		if enableInternalDB {
+			ipGeo, err = readInternalSource(ipNet, g.Config().InternalDB.Source, language)
+			if err != nil {
+				return
+			}
+
+			// ToString 9个字段 为空是8
+			if len(ipGeo.ToString()) != 8 {
+				return
+			}
 		}
 
 	}
