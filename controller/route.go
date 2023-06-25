@@ -73,11 +73,9 @@ func Routes(r *gin.Engine) {
 		username, _ := c.Cookie("username")
 		nickname, _ := c.Cookie("nickname")
 
-		//c.Redirect(302, g.Config().Oauth.LogoutAddr)
 		c.SetCookie("nickname", nickname, -1, "/", "", false, true)
 		c.SetCookie("username", username, -1, "/", "", false, true)
 		c.Redirect(http.StatusMovedPermanently, g.Config().Oauth.LogoutAddr)
-		//c.String(http.StatusOK, g.VERSION)
 	})
 
 	// sso认证回调
