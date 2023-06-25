@@ -14,12 +14,12 @@ func (self IpGeo) ToString() string {
 	return res
 }
 
-func SearchIP(ipStr string) (result IpGeo) {
+func SearchIP(ipStr string, isApi bool, isAuth bool) (result IpGeo) {
 	//无论发生什么，IP 永远返回
 	result.IP = ipStr
 
 	var err error
-	result, err = GetIP(ipStr, g.Config().Source)
+	result, err = GetIP(ipStr, g.Config().Source, isApi, isAuth)
 
 	if err != nil {
 		logger.Error(err)
