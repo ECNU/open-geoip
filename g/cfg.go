@@ -130,6 +130,7 @@ type OAuth struct {
 	LogoutAddr      string   `json:"logoutAddr"`
 	ClientId        string   `json:"clientId"`
 	ClientSecret    string   `json:"clientSecret"`
+	State           string   `json:"state"`
 	UserinfoIsArray bool     `json:"UserinfoIsArray"`
 	UserinfoPrefix  string   `json:"UserinfoPrefix"`
 	Scopes          []string `json:"scopes"`

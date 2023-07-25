@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"github.com/ECNU/open-geoip/g"
 	"github.com/ECNU/open-geoip/util"
 	"github.com/gin-gonic/gin"
@@ -8,14 +9,13 @@ import (
 )
 
 func OauthAuth(c *gin.Context) {
-	code := c.Query("code")
-	oauthToken, err := util.OauthAuthReq(code)
+	code := c.Request.FormValue("code")
+	token, err := g.OauthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "内部错误")
-
 	}
 
-	userInfo, err := util.OauthUserInfo(oauthToken.AccessToken)
+	userInfo, err := util.OauthUserInfo(token.AccessToken)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "内部错误")
 	}
