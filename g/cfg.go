@@ -21,6 +21,8 @@ type GlobalConfig struct {
 	AutoDownload AutoDownloadConfig `json:"autoDownload"`
 	RateLimit    RateLimitConfig    `json:"rateLimit"`
 	Http         HttpConfig         `json:"http"`
+	SSO          SSO                `json:"sso"`
+	Oauth        OAuth              `json:"oauth"`
 }
 
 /*
@@ -60,6 +62,7 @@ InternalDBConfi 内部数据库
 */
 type InternalDBConfig struct {
 	Source  string `json:"source"`
+	Auth    bool   `json:"auth"`
 	Enabled bool   `json:"enabled"`
 	DB      string `json:"db"`
 }
@@ -108,6 +111,38 @@ type HttpConfig struct {
 	TrustProxy []string `json:"trustProxy"`
 	XAPIKey    string   `json:"x-api-key"`
 	CORS       []string `json:"cors"`
+}
+
+// SSO 配置
+type SSO struct {
+	Enabled bool   `json:"enabled"`
+	Type    string `json:"type"`
+}
+
+// OAuth 配置
+type OAuth struct {
+	Enabled         bool     `json:"enabled"`
+	DisplayName     string   `json:"displayName"`
+	RedirectURL     string   `json:"redirectURL"`
+	SsoAddr         string   `json:"ssoAddr"`
+	TokenAddr       string   `json:"TokenAddr"`
+	UserInfoAddr    string   `json:"userInfoAddr"`
+	LogoutAddr      string   `json:"logoutAddr"`
+	ClientId        string   `json:"clientId"`
+	ClientSecret    string   `json:"clientSecret"`
+	State           string   `json:"state"`
+	UserinfoIsArray bool     `json:"UserinfoIsArray"`
+	UserinfoPrefix  string   `json:"UserinfoPrefix"`
+	Scopes          []string `json:"scopes"`
+	AuthExpire      int      `json:"authExpire"`
+	Attributes      OauthAttributes
+}
+
+type OauthAttributes struct {
+	Username string `json:"userName"`
+	Nickname string `json:"nickName"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
 }
 
 var (

@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"net/http"
-
 	"github.com/ECNU/open-geoip/g"
+	"net/http"
+	"strings"
 
 	"github.com/ECNU/open-geoip/models"
 
@@ -11,7 +11,10 @@ import (
 )
 
 func geoIpApi(c *gin.Context) {
+	isAuth := false
 	ipAddr := c.Query("ip")
+	// 去掉左右空格
+	ipAddr = strings.TrimSpace(ipAddr)
 	if !models.CheckIPValid(ipAddr) {
 		c.String(http.StatusOK, "不是合法的IP地址")
 		return
@@ -20,7 +23,15 @@ func geoIpApi(c *gin.Context) {
 		c.String(http.StatusOK, err.Error())
 		return
 	}
-	c.String(http.StatusOK, models.SearchIP(ipAddr).ToString())
+
+	username, _ := c.Cookie("username")
+	nickname, _ := c.Cookie("nickname")
+
+	if username != "" || nickname != "" {
+		isAuth = true
+	}
+
+	c.String(http.StatusOK, models.SearchIP(ipAddr, false, isAuth).ToString())
 }
 
 func getMyIP(c *gin.Context) {
@@ -35,11 +46,11 @@ func getMyIPFormat(c *gin.Context) {
 }
 
 func getMyLocation(c *gin.Context) {
-	c.String(http.StatusOK, models.SearchIP(c.ClientIP()).ToString())
+	c.String(http.StatusOK, models.SearchIP(c.ClientIP(), true, false).ToString())
 }
 
 func getMyLocationFormat(c *gin.Context) {
-	c.JSON(http.StatusOK, SuccessRes(models.SearchIP(c.ClientIP())))
+	c.JSON(http.StatusOK, SuccessRes(models.SearchIP(c.ClientIP(), true, false)))
 }
 
 func openGetIpApi(c *gin.Context) {
@@ -48,6 +59,6 @@ func openGetIpApi(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorRes(ParamValueError, "不是合法的IP地址"))
 		return
 	}
-	res := models.SearchIP(ipAddr)
+	res := models.SearchIP(ipAddr, true, false)
 	c.JSON(http.StatusOK, SuccessRes(res))
 }

@@ -40,6 +40,12 @@ func main() {
 		g.InitRedisConnPool()
 	}
 
+	if g.Config().SSO.Enabled {
+		if g.Config().Oauth.Enabled {
+			g.InitOauth()
+		}
+	}
+
 	srv := controller.InitGin(g.Config().Http.Listen)
 	g.InitLog(g.Config().Logger)
 
