@@ -14,29 +14,66 @@
 	},
 	"internaldb": {
 		"source": "maxmind",
+		"auth":false,
 		"enabled": false,
 		"db": "internal.mmdb"
 	},
 	"db": {
 		"maxmind": "GeoLite2-City.mmdb",
 		"qqzengip": "",
-		"ipdb":""
+		"ipdb": ""
 	},
 	"source": {
 		"ipv4": "maxmind",
 		"ipv6": "maxmind"
 	},
-	"autoDownload":{
+	"autoDownload": {
+		"enabled": false,
+		"MaxmindLicenseKey": "",
+		"targetFilePath": "",
+		"timeout": 3,
+		"interval": 24
+	},
+	"rateLimit": {
+		"enabled": false,
+		"minute": 100,
+		"hour": 1000,
+		"day": 10000
+	},
+	"sso":{
 		"enabled":false,
-		"MaxmindLicenseKey":"",
-		"targetFilePath":"",
-		"timeout":3,
-		"interval":24
+		"authExpire":3600,
+		"type":"oauth2"
+	},
+	"oauth2":{
+		"enabled":false,
+		"displayName":"统一身份认证",
+		"redirectURL":"http://localhost/sso/callback/oauth2",
+		"AuthAddr":"http://cas.example.org/cas/oauth2.0/authorize",
+		"TokenAddr":"http://cas.example.org/cas/oauth2.0/accessToken",
+		"UserinfoAddr":"http://cas.example.org/cas/oauth2.0/profile",
+		"LogoutAddr":"https://cas.example.org/cas/logout?redirect_uri=http://localhost/",
+		"scopes":["exmaple-scope"],
+		"clientId":"client_id",
+		"clientSecret":"client_secret",
+		"userinfoIsArray":false,
+		"userinfoPrefix":"attributes",
+		"attributes":{
+			"username":"userId",
+			"nickname":"name"
+		}
 	},
 	"http": {
 		"listen": "0.0.0.0:80",
 		"trustProxy": ["127.0.0.1", "::1"],
-		"cors":["http://localhost"],
-		"x-api-key": "this-is-key"
+		"cors": ["http://localhost"],
+		"x-api-key": "this-is-key",
+		"sessionOptions": {
+			"path": "/",
+			"domain": "localhost",
+			"maxAge": 3600,
+			"secure": false,
+			"httpOnly": true
+		}
 	}
 }
