@@ -2,21 +2,22 @@ package g
 
 import (
 	"fmt"
+
 	"golang.org/x/oauth2"
 )
 
-var OauthConfig *oauth2.Config
+var Oauth2Config *oauth2.Config
 
-func InitOauth() {
-	fmt.Printf("2222%v\n\n", Config().Oauth.ClientId)
-	OauthConfig = &oauth2.Config{
-		ClientID:     Config().Oauth.ClientId,
-		ClientSecret: Config().Oauth.ClientSecret,
-		RedirectURL:  Config().Oauth.RedirectURL,
-		Scopes:       Config().Oauth.Scopes,
+func InitOauth2() {
+	fmt.Printf("2222%v\n\n", Config().Oauth2.ClientId)
+	Oauth2Config = &oauth2.Config{
+		ClientID:     Config().Oauth2.ClientId,
+		ClientSecret: Config().Oauth2.ClientSecret,
+		RedirectURL:  Config().Oauth2.RedirectURL,
+		Scopes:       Config().Oauth2.Scopes,
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  Config().Oauth.SsoAddr,
-			TokenURL: Config().Oauth.TokenAddr,
+			AuthURL:  Config().Oauth2.AuthAddr,
+			TokenURL: Config().Oauth2.TokenAddr,
 		},
 	}
 }

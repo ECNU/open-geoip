@@ -22,7 +22,7 @@ type GlobalConfig struct {
 	RateLimit    RateLimitConfig    `json:"rateLimit"`
 	Http         HttpConfig         `json:"http"`
 	SSO          SSO                `json:"sso"`
-	Oauth        OAuth              `json:"oauth"`
+	Oauth2       OAuth2             `json:"oauth2"`
 }
 
 /*
@@ -107,42 +107,51 @@ type SourceConfig struct {
 HttpConfig Http 配置
 */
 type HttpConfig struct {
-	Listen     string   `json:"listen"`
-	TrustProxy []string `json:"trustProxy"`
-	XAPIKey    string   `json:"x-api-key"`
-	CORS       []string `json:"cors"`
+	Listen         string               `json:"listen"`
+	TrustProxy     []string             `json:"trustProxy"`
+	XAPIKey        string               `json:"x-api-key"`
+	CORS           []string             `json:"cors"`
+	SessionOptions SessionOptionsConfig `json:"sessionOptions"`
+}
+
+/*
+SessionOptionsConfig Session 配置
+*/
+type SessionOptionsConfig struct {
+	Path     string `json:"path"`
+	Domain   string `json:"domain"`
+	MaxAge   int    `json:"maxAge"`
+	Secure   bool   `json:"secure"`
+	HttpOnly bool   `json:"httpOnly"`
 }
 
 // SSO 配置
 type SSO struct {
-	Enabled bool   `json:"enabled"`
-	Type    string `json:"type"`
+	Enabled    bool   `json:"enabled"`
+	AuthExpire int    `json:"authExpire"`
+	Type       string `json:"type"`
 }
 
-// OAuth 配置
-type OAuth struct {
+// OAuth2 配置
+type OAuth2 struct {
 	Enabled         bool     `json:"enabled"`
 	DisplayName     string   `json:"displayName"`
 	RedirectURL     string   `json:"redirectURL"`
-	SsoAddr         string   `json:"ssoAddr"`
-	TokenAddr       string   `json:"TokenAddr"`
+	AuthAddr        string   `json:"authAddr"`
+	TokenAddr       string   `json:"tokenAddr"`
 	UserInfoAddr    string   `json:"userInfoAddr"`
 	LogoutAddr      string   `json:"logoutAddr"`
 	ClientId        string   `json:"clientId"`
 	ClientSecret    string   `json:"clientSecret"`
-	State           string   `json:"state"`
-	UserinfoIsArray bool     `json:"UserinfoIsArray"`
-	UserinfoPrefix  string   `json:"UserinfoPrefix"`
+	UserinfoIsArray bool     `json:"userinfoIsArray"`
+	UserinfoPrefix  string   `json:"userinfoPrefix"`
 	Scopes          []string `json:"scopes"`
-	AuthExpire      int      `json:"authExpire"`
 	Attributes      OauthAttributes
 }
 
 type OauthAttributes struct {
 	Username string `json:"userName"`
 	Nickname string `json:"nickName"`
-	Phone    string `json:"phone"`
-	Email    string `json:"email"`
 }
 
 var (

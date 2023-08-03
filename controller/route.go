@@ -1,11 +1,14 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/ECNU/open-geoip/g"
 	"github.com/ECNU/open-geoip/util"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/toolkits/pkg/logger"
-	"net/http"
 )
 
 func InitGin(listen string) (httpServer *http.Server) {
@@ -21,7 +24,24 @@ func InitGin(listen string) (httpServer *http.Server) {
 	r.Use(gin.Recovery())
 
 	r.SetTrustedProxies(g.Config().Http.TrustProxy)
+	if g.Config().SSO.Enabled {
+		store, err := redis.NewStore(10, "tcp", g.Config().Redis.Dsn, g.Config().Redis.Password, []byte("open-geoip"))
+		if err != nil {
+			panic(err)
+		}
+		store.Options(sessions.Options{
+			Path:     g.Config().Http.SessionOptions.Path,
+			Domain:   g.Config().Http.SessionOptions.Domain,
+			MaxAge:   g.Config().Http.SessionOptions.MaxAge,
+			Secure:   g.Config().Http.SessionOptions.Secure,
+			HttpOnly: g.Config().Http.SessionOptions.HttpOnly,
+		})
+		r.Use(sessions.Sessions("mysession", store))
+	}
 
+	r.GET("/version", func(c *gin.Context) {
+		c.String(http.StatusOK, g.VERSION)
+	})
 	Routes(r)
 
 	httpServer = &http.Server{
@@ -36,6 +56,7 @@ func Routes(r *gin.Engine) {
 	r.Static("/assets", "assets")
 
 	r.GET("/ip", geoIpApi)
+	r.GET("/", index)
 
 	myip := r.Group("/")
 	myip.Use(CORS())
@@ -54,39 +75,37 @@ func Routes(r *gin.Engine) {
 	rest.DELETE("/ratelimit", clearRateLimit)
 	rest.GET("/ratelimit", getRateLimit)
 
-	r.GET("/", func(c *gin.Context) {
-		username, _ := c.Cookie("username")
-		nickname, _ := c.Cookie("nickname")
-
-		if g.Config().SSO.Enabled {
-			if g.Config().Oauth.Enabled {
-				oauthUrl := g.OauthConfig.AuthCodeURL(g.Config().Oauth.State)
-				c.HTML(http.StatusOK, "index.html", gin.H{
-					"title": "主页", "sso": g.Config().SSO, "oauth": g.Config().Oauth, "oauthUrl": oauthUrl, "username": username, "nickname": nickname})
-				return
-			}
-		}
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "主页"})
-	})
-	r.GET("/version", func(c *gin.Context) {
-		c.String(http.StatusOK, g.VERSION)
-	})
-
-	r.GET("/logout", func(c *gin.Context) {
-
-		username, _ := c.Cookie("username")
-		nickname, _ := c.Cookie("nickname")
-
-		c.SetCookie("nickname", nickname, -1, "/", "", false, true)
-		c.SetCookie("username", username, -1, "/", "", false, true)
-		c.Redirect(http.StatusMovedPermanently, g.Config().Oauth.LogoutAddr)
-	})
-
 	// sso认证回调
-	ssoCallback := r.Group("/auth")
+	sso := r.Group("/sso")
+	sso.Use(NoCache())
+	// logout
+	sso.GET("/logout", ssoLogout)
 	// oauth
-	ssoCallback.GET("/callback/oauth", OauthAuth)
+	sso.GET("/callback/oauth2", OauthAuth)
+}
+
+func index(c *gin.Context) {
+	var username, nickname string
+	session := sessions.Default(c)
+	u := session.Get("username")
+	n := session.Get("nickname")
+	if u != nil {
+		username = u.(string)
+	}
+	if n != nil {
+		nickname = n.(string)
+	}
+
+	if g.Config().SSO.Enabled {
+		if g.Config().Oauth2.Enabled {
+			authCodeURL := g.Oauth2Config.AuthCodeURL(util.RandStringRunes(16))
+			c.HTML(http.StatusOK, "index.html", gin.H{
+				"title": "主页", "sso": g.Config().SSO, "oauth2": g.Config().Oauth2, "authCodeURL": authCodeURL, "username": username, "nickname": nickname})
+			return
+		}
+	}
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"title": "主页"})
 }
 
 func CORS() gin.HandlerFunc {
@@ -106,5 +125,13 @@ func CORS() gin.HandlerFunc {
 		} else {
 			context.Next()
 		}
+	}
+}
+
+func NoCache() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		context.Writer.Header().Add("Cache-Control", "no-store")
+		context.Writer.Header().Add("Pragma", "no-cache")
+		context.Next()
 	}
 }

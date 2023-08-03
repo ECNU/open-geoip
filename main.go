@@ -41,8 +41,8 @@ func main() {
 	}
 
 	if g.Config().SSO.Enabled {
-		if g.Config().Oauth.Enabled {
-			g.InitOauth()
+		if g.Config().Oauth2.Enabled {
+			g.InitOauth2()
 		}
 	}
 
@@ -61,7 +61,9 @@ func main() {
 		}
 	}()
 
-	go cron.SyncMaxmindDatabase()
+	if g.Config().AutoDownload.Enabled {
+		go cron.SyncMaxmindDatabase()
+	}
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

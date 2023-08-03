@@ -1,9 +1,11 @@
 package controller
 
 import (
-	"github.com/ECNU/open-geoip/g"
 	"net/http"
 	"strings"
+
+	"github.com/ECNU/open-geoip/g"
+	"github.com/gin-contrib/sessions"
 
 	"github.com/ECNU/open-geoip/models"
 
@@ -23,12 +25,12 @@ func geoIpApi(c *gin.Context) {
 		c.String(http.StatusOK, err.Error())
 		return
 	}
-
-	username, _ := c.Cookie("username")
-	nickname, _ := c.Cookie("nickname")
-
-	if username != "" || nickname != "" {
-		isAuth = true
+	if g.Config().SSO.Enabled {
+		session := sessions.Default(c)
+		u := session.Get("username")
+		if u != nil {
+			isAuth = true
+		}
 	}
 
 	c.String(http.StatusOK, models.SearchIP(ipAddr, false, isAuth).ToString())

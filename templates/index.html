@@ -25,9 +25,9 @@
 
             {{ if or (not .nickname) (not .username)  }}
             {{ if .sso.Enabled }}
-            {{ if .oauth.Enabled }}
-            <a class="navbar-brand logo text-uppercase" href={{.oauthUrl}}>
-                <span>单点登录: {{ .oauth.DisplayName }}</span>
+            {{ if .oauth2.Enabled }}
+            <a class="navbar-brand logo text-uppercase" href={{.authCodeURL}}>
+                <span>{{ .oauth2.DisplayName }}</span>
             </a>
             {{ end }}
             {{ end }}
@@ -35,7 +35,7 @@
             <div>
                 <span>{{ .nickname }}</span>
                 <span>{{ .username }}</span>
-                <a class="navbar-brand logo text-uppercase" href="/logout">
+                <a class="navbar-brand logo text-uppercase" href="/sso/logout">
                     <span>注销</span>
                 </a>
             </div>
