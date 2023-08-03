@@ -85,18 +85,17 @@ func Routes(r *gin.Engine) {
 }
 
 func index(c *gin.Context) {
-	var username, nickname string
-	session := sessions.Default(c)
-	u := session.Get("username")
-	n := session.Get("nickname")
-	if u != nil {
-		username = u.(string)
-	}
-	if n != nil {
-		nickname = n.(string)
-	}
-
 	if g.Config().SSO.Enabled {
+		var username, nickname string
+		session := sessions.Default(c)
+		u := session.Get("username")
+		n := session.Get("nickname")
+		if u != nil {
+			username = u.(string)
+		}
+		if n != nil {
+			nickname = n.(string)
+		}
 		if g.Config().Oauth2.Enabled {
 			authCodeURL := g.Oauth2Config.AuthCodeURL(util.RandStringRunes(16))
 			c.HTML(http.StatusOK, "index.html", gin.H{
