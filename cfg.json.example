@@ -52,7 +52,7 @@
 		"AuthAddr":"http://cas.example.org/cas/oauth2.0/authorize",
 		"TokenAddr":"http://cas.example.org/cas/oauth2.0/accessToken",
 		"UserinfoAddr":"http://cas.example.org/cas/oauth2.0/profile",
-		"LogoutAddr":"https://cas.example.org/cas/logout?redirect_uri=http://localhost/",
+		"LogoutAddr":"https://cas.example.org/cas/logout?service=http://localhost/",
 		"scopes":["exmaple-scope"],
 		"clientId":"client_id",
 		"clientSecret":"client_secret",
